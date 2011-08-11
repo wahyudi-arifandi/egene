@@ -1,0 +1,35 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($tplNameGender = "male")
+#else
+#set($tplNameGender = "female")
+#end
+#set($tplItemTblList = ["tpln_dress_length", "tpln_housetool_length", "tpln_book", "tpln_fruit", "tpln_stationary"])
+#set($tplItemTbl = $vOptGenerator.genOptStr($tplItemTblList))
+#set($item1 = $vTemplateGenerator.retrieveTpl($tplItemTbl))
+#set($item1List = [$item1])
+#set($item2 = $vTemplateGenerator.retrieveTplExcl($tplItemTbl, $item1List))
+#set($item1Count = $vNumberGenerator.genInt(1, 15))
+#set($item2Count = $vNumberGenerator.genInt(1, 15))
+#set($item1Ratio = $vNumberGenerator.genInt(1, 10))
+#set($item2CountTimes10 = ($item2Count * 10))
+#set($item2RatioOpt = $vNumberGenerator.genDivisor($item2CountTimes10))
+#set($item2Ratio = $vOptGenerator.genOptInt($item2RatioOpt))
+#set($totalMul = $item1Count + ($item2Count * ($mathTool.toDouble($item1Ratio)/$mathTool.toDouble($item2Ratio))))
+#set($item1WMul = [$item2Ratio])
+#set($item1W = $vNumberGenerator.genDoubleMul(50, 1000, 2, $item1WMul))
+#set($item2W = ($item1W * ($mathTool.toDouble($item1Ratio)/$mathTool.toDouble($item2Ratio))))
+#set($total = $totalMul * $item1W)
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_22_3_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_22_3_q"))

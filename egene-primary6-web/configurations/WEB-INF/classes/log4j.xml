@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- PRIORITY: 
+	TRACE [minimum; more detail],
+	DEBUG, 
+	INFO, 
+	WARN, 
+	ERROR, 
+	FATAL [maximum; less detail] 
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%t] %c (%F:%L) %x - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="TRACE" />
+			<param name="LevelMax" value="FATAL" />
+		</filter>
+	</appender>
+	<appender name="EGENE_LOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.home}/webapps/egene-web/logs/egene.log" />
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%t] %c (%F:%L) %x - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="TRACE" />
+			<param name="LevelMax" value="FATAL" />
+		</filter>
+	</appender>
+
+	<logger name="edu.ntu.eee.csn.ism.egene">
+		<level value="${log4j.xml.log.level}" />
+		<!-- <appender-ref ref="ConsoleAppender" /> -->
+		<appender-ref ref="EGENE_LOG" />
+	</logger>
+
+	<logger name="net.didion.jwnl">
+		<level value="${log4j.xml.log.level}" />
+		<!-- <appender-ref ref="ConsoleAppender" /> -->
+		<appender-ref ref="EGENE_LOG" />
+	</logger>
+
+	<logger name="org.apache">
+		<level value="${log4j.xml.log.level}" />
+		<!-- <appender-ref ref="ConsoleAppender" /> -->
+		<appender-ref ref="EGENE_LOG" />
+	</logger>
+
+	<root>
+		<priority value="${log4j.xml.log.level}" />
+	</root>
+
+</log4j:configuration> 

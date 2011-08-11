@@ -1,0 +1,39 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($centList = [5, 10, 20, 50])
+#set($cent = $vOptGenerator.genOptIntN($centList, 3))
+#set($centSort = $sortTool.sort($cent))
+#set($cmpList = ["fewer", "more"])
+#set($cmp = $vOptGenerator.genOptStr($cmpList))
+#set($morecent = $vNumberGenerator.genInt(2, 20))
+#set($mulcent = $vNumberGenerator.genInt(2, 10))
+## calculate total
+#set($totalMin = 2 + $mulcent)
+#set($totalMax = $totalMin + 1000)
+#set($totalMulList = [$totalMin])
+#set($total = $vNumberGenerator.genIntMul($totalMin,$totalMax,$totalMulList))
+#if($cmp == "more")
+#set( $total = $total - $morecent )
+#else
+#set($total = $total + $morecent )
+#end
+## calculate centxCount
+#if($cmp == "more")
+#set($cent0Count = ($total + $morecent) / (2 + $mulcent))
+#set($cent1Count = $cent0Count - $morecent)
+#else
+#set($cent0Count = ($total - $morecent) / (2 + $mulcent))
+#set($cent1Count = $cent0Count + $morecent)
+#end
+#set($cent2Count = $cent0Count * $mulcent)
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_21_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_21_1_q"))

@@ -1,0 +1,83 @@
+## Velocity Macro Global Library
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## Define your global macro here
+##########
+##### COMMON #####
+#macro(switchNPS $noun $count)#if($count > 1)$vNounFormatter.genPlural($noun)#else$noun#end#end
+#macro(switchVPS $verb $count)#if($count > 1)$verb#else$vVerbFormatter.genVs($verb)#end#end
+#macro(upperFirst $word)#if($word.length() == 0)$word#else#if($word.length() == 1)$word.toUpperCase()#else$word.substring(0,1).toUpperCase()$word.substring(1)#end#end#end
+#macro(cminus)-#end
+##### Number Generator #####
+#macro(genInt $min $max)${vNumberGenerator.genInt($min,$max)}#end
+##########
+#macro(genIntMul $min $max $mul)${vNumberGenerator.genIntMul($min,$max,$mul)}#end
+##########
+#macro(genIntExcl $min $max $excl)${vNumberGenerator.genIntExcl($min,$max,$excl)}#end
+##########
+#macro(genIntMulExcl $min $max $mul $excl)${vNumberGenerator.genIntMulExcl($min,$max,$mul,$excl)}#end
+##########
+#macro(genDouble $min $max $commaPos)${vNumberGenerator.genDouble($min,$max,$commaPos)}#end
+##########
+#macro(genDoubleMul $min $max $commaPos $mul)${vNumberGenerator.genDoubleMul($min,$max,$commaPos,$mul)}#end
+##########
+#macro(genDoubleExcl $min $max $commaPos $excl)${vNumberGenerator.genDoubleExcl($min,$max,$commaPos,$excl)}#end
+##########
+#macro(genDoubleMulExcl $min $max $commaPos $mul $excl)${vNumberGenerator.genDoubleMulExcl($min,$max,$commaPos,$mul,$excl)}#end
+##########
+##### Template Generator #####
+#macro(retrieveTpl $tableName)${vTemplateGenerator.retrieveTpl($tableName)}#end
+##########
+#macro(retrieveTplExcl $tableName $excl)${vTemplateGenerator.retrieveTplExcl($tableName,$excl)}#end
+##########
+##### Verb Formatter #####
+#macro(genV2 $v)${vVerbFormatter.genV2($v)}#end
+##########
+#macro(genV3 $v)${vVerbFormatter.genV3($v)}#end
+##########
+#macro(genVs $v)${vVerbFormatter.genVs($v)}#end
+##########
+#macro(genVing $v)${vVerbFormatter.genVing($v)}#end
+##########
+##### Noun Formatter #####
+#macro(genPlural $n)${vNounFormatter.genPlural($n)}#end
+##########
+#macro(genPronSubj $n)${vNounFormatter.genPronSubj($n)}#end
+##########
+#macro(genPronSubjGender $n $gender)${vNounFormatter.genPronSubjGender($n,$gender)}#end
+##########
+#macro(genPronObj $n)${vNounFormatter.genPronObj($n)}#end
+##########
+#macro(genPronObjGender $n $gender)${vNounFormatter.genPronObjGender($n,$gender)}#end
+##########
+#macro(genPossPron $n)${vNounFormatter.genPossPron($n)}#end
+##########
+#macro(genPossPronGender $n $gender)${vNounFormatter.genPossPronGender($n,$gender)}#end
+##########
+#macro(genPossAdj $n)${vNounFormatter.genPossAdj($n)}#end
+##########
+#macro(genPossAdjGender $n $gender)${vNounFormatter.genPossAdjGender($n,$gender)}#end
+##########
+##### Opt Generator #####
+#macro(genOptStr $opts)${vOptGenerator.genOptStr($opts)}#end
+##########
+#macro(genOptStrN $opts $n)${vOptGenerator.genOptStrN($opts,$n)}#end
+##########
+#macro(genOptStrExcl $opts $excl)${vOptGenerator.genOptStrExcl($opts,$excl)}#end
+##########
+#macro(genOptInt $opts)${vOptGenerator.genOptInt($opts)}#end
+##########
+#macro(genOptIntN $opts $n)${vOptGenerator.genOptIntN($opts,$n)}#end
+##########
+#macro(genOptIntExcl $opts $excl)${vOptGenerator.genOptIntExcl($opts,$excl)}#end
+##########
+#macro(genOptDouble $opts)${vOptGenerator.genOptDouble($opts)}#end
+##########
+#macro(genOptDoubleN $opts $n)${vOptGenerator.genOptDoubleN($opts,$n)}#end
+##########
+#macro(genOptDoubleExcl $opts $excl)${vOptGenerator.genOptDoubleExcl($opts,$excl)}#end

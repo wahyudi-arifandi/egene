@@ -1,0 +1,62 @@
+## Template For LPM Migration
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+#set($min=0)
+#set($max=20)
+#set($mul2=2)
+#set($mul3=3)
+#set($excl4=12)
+#set($mul=[$mul2,$mul3])
+#set($excl=[$excl4])
+#set($commaPos=1)
+integer: #genInt($min,$max)$nl
+integer-mul: #genIntMul($min,$max,$mul)$nl
+integer-excl: #genIntExcl($min,$max,$excl)$nl
+integer-mul-mul-excl: #genIntMulExcl($min,$max,$mul,$excl)$nl
+double: #genDouble($min,$max,$commaPos)$nl
+double-mul: #genDoubleMul($min,$max,$commaPos,$mul)$nl
+double-excl: #genDoubleExcl($min,$max,$commaPos,$excl)$nl
+double-mul-mul-excl: #genDoubleMulExcl($min,$max,$commaPos,$mul,$excl)$nl
+#set($tableName="tpln_fruit")
+#set($tplExcl=["banana","grape","orange","melon","watermelon"])
+retrieve-tpl: #retrieveTpl($tableName)$nl
+retrieve-tpl: #retrieveTplExcl($tableName,$tplExcl)$nl
+#set($v1="think")
+v1: $v1$nl
+v2 = #genV2($v1)$nl
+v3 = #genV3($v1)$nl
+vs = #genVs($v1)$nl
+ving = #genVing($v1)$nl
+#set($n="table")
+#set($n2="alice")
+#set($gender="female")
+singular $n$nl
+plural #genPlural($n)$nl
+pronSubj #genPronSubj($n)$nl
+pronSubjGender#genPronSubjGender($n2,$gender)$nl
+pronObj #genPronObj($n)$nl
+pronObjGender #genPronObjGender($n2,$gender)$nl
+possPron #genPossPron($n)$nl
+possPronGender #genPossPronGender($n2,$gender)$nl
+possAdj #genPossAdj($n)$nl
+possAdjGender #genPossAdjGender($n2,$gender)$nl
+#set($optsStr=["a","b","c","d"])
+#set($optsStrExcl=["a","b","c"])
+genOptStr #genOptStr($optsStr)$nl
+genOptStrN #genOptStrN($optsStr,2)$nl
+genOptStrExcl #genOptStrExcl($optsStr,$optsStrExcl)$nl
+#set($optsInt=[1,2,3,4])
+#set($optsIntExcl=[1,2,3])
+genOptInt #genOptInt($optsInt)$nl
+genOptIntN #genOptIntN($optsInt,2)$nl
+genOptIntExcl #genOptIntExcl($optsInt,$optsIntExcl)$nl
+#set($optsDbl=[0.1,0.2,0.3,0.4])
+#set($optsDblExcl=[0.1,0.2,0.3])
+genOptDbl #genOptDouble($optsDbl)$nl
+genOptDblN #genOptDoubleN($optsDbl,2)$nl
+genOptDblExcl #genOptDoubleExcl($optsDbl,$optsDblExcl)$nl
