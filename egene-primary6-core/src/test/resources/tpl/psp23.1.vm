@@ -1,0 +1,25 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($tplNameGender = "male")
+#else
+#set($tplNameGender = "female")
+#end
+#set($salaryNormal = $vNumberGenerator.genDouble(10, 200, 1))
+#set($salaryOTRatio = $vNumberGenerator.genDouble(11, 20, 1))
+#set($salaryOT = $salaryNormal * $salaryOTRatio)
+## generate exam paper
+#upperFirst($name) was paid $escapeTool.getD()$vFormatter.formatDecimal($salaryNormal, 2) for each hour $vNounFormatter.genPronSubjGender($name, $tplNameGender) worked during office hours.
+#upperFirst($vNounFormatter.genPronSubjGender($name, $tplNameGender)) was paid $escapeTool.getD()$vFormatter.formatDecimal($salaryOT, 2) for each hour $vNounFormatter.genPronSubjGender($name, $tplNameGender) worked overtime.
+Last month #upperFirst($name)'s salary was xx.
+For every xx hours #upperFirst($name) worked, xx hours were overtime.

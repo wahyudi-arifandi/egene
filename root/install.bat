@@ -1,0 +1,1 @@
+mvn -Degene.cfgdir="C:\arif\data\edu\ism\ws\egene-primary6-core\src\test\resources" -Dmaven.test.skip=true clean install
