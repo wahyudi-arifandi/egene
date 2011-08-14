@@ -79,7 +79,8 @@ public class VelocityBaseEngineTest extends TestCase {
 		try {
 			VelocityBaseEngine ve = new VelocityBaseEngine();
 
-			String file = "psp23.4.vm";
+
+			String file = "psp24.1.vm";
 			// String file = "unittest.vm";
 			String str = ve.generateFromTemplateFile(this.templateDirName
 					+ File.separator + file, null);

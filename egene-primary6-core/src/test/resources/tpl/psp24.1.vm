@@ -1,0 +1,46 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl1 = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name1 = $vTemplateGenerator.retrieveTpl($tplNameTbl1))
+#if($tplNameTbl1 == "tpln_male_name")
+#set($name1Gender = "male")
+#else
+#set($name1Gender = "female")
+#end
+#set($name2Excl = [$name1])
+#set($tplNameTbl2 = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name2 = $vTemplateGenerator.retrieveTplExcl($tplNameTbl2, $name2Excl))
+#if($tplNameTbl2 == "tpln_male_name")
+#set($name2Gender = "male")
+#else
+#set($name2Gender = "female")
+#end
+#set($tplItemTblList = ["tpln_stationary", "tpln_fruit", "tpln_cake", "tpln_book"])
+#set($tplItemTbl = $vOptGenerator.genOptStr($tplItemTblList))
+#set($item1 = $vTemplateGenerator.retrieveTpl($tplItemTbl))
+#set($item2Excl = [$item1])
+#set($item2 = $vTemplateGenerator.retrieveTplExcl($tplItemTbl, $item2Excl))
+#set($item1Price = $vNumberGenerator.genIntMul(100, 500, [10]))
+#set($item1PriceD = $mathTool.toDouble($item1Price) / 100)
+#set($item2Price = $vNumberGenerator.genIntMul(100, 1000, [10]))
+#set($item1PriceD = $mathTool.toDouble($item2Price) / 100)
+#set($name1Item1Count = $vNumberGenerator.genInt(2, 20))
+#set($name1Item2Count = $vNumberGenerator.genInt(2, 20))
+#set($name2Item1Count = $vNumberGenerator.genInt(2, 20))
+#set($name2Item2Count = $vNumberGenerator.genInt(2, 20))
+#set($name1TotalPaid = ($name1Item1Count * $item1Price) + ($name1Item2Count * $item2Price))
+#set($name1TotalPaidD = $mathTool.toDouble($name1TotalPaid) / 100)
+#set($name2TotalPaid = ($name2Item1Count * $item1Price) + ($name2Item2Count * $item2Price))
+#set($name2TotalPaidD = $mathTool.toDouble($name2TotalPaid) / 100)
+#set($item1Item2Price = $item1Price + $item2Price)
+#set($item1Item2PriceD = $mathTool.toDouble($item1Item2Price) / 100)
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_24_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_24_1_q"))
