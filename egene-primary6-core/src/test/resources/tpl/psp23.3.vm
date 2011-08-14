@@ -1,0 +1,25 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($priceNormal = $vNumberGenerator.genDouble(30, 150, 1))
+#set($priceNormalCent = $priceNormal * 100)
+#set($priceNormalCent = $mathTool.toInteger($priceNormalCent))
+#set($priceDefectLessCentMax = $priceNormalCent / 2)
+#set($priceDefectLessCent = $vNumberGenerator.genIntMul(10, $priceDefectLessCentMax, [10]))
+#set($priceDefectCent = $priceNormalCent - $priceDefectLessCent)
+#set($priceDefect = $mathTool.toDouble($priceDefectCent) / 100)
+#set($saleTotal = $vNumberGenerator.genInt(10, 30))
+#set($saleDefectMax = $saleTotal / 3)
+#set($saleDefect = $vNumberGenerator.genInt(1, $saleDefectMax))
+#set($saleTotalSetCent = (($saleTotal - $saleDefect) * $priceNormalCent) + ($saleDefect * $priceDefectCent))
+#set($setCount = $vNumberGenerator.genInt(5, 30))
+#set($saleLastMonthCent = $setCount * $saleTotalSetCent)
+#set($saleLastMonth = $mathTool.toDouble($saleLastMonthCent) / 100)
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_3_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_3_q"))

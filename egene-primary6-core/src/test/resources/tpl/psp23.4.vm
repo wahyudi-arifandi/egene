@@ -1,0 +1,29 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($tplNameGender = "male")
+#else
+#set($tplNameGender = "female")
+#end
+#set($markCorrect = $vNumberGenerator.genInt(5, 10))
+#set($markWrong = $vNumberGenerator.genInt(5, 10))
+#set($qTotal = $vNumberGenerator.genInt(5, 15))
+#set($qWrongMax = $qTotal / 3)
+#set($qWrong = $vNumberGenerator.genInt(1, $qWrongMax))
+#set($qBlankMax = $qTotal / 3)
+#set($qBlank = $vNumberGenerator.genInt(1, $qBlankMax))
+#set($qTotalSet = (($qTotal - $qBlank - $qWrong) * $markCorrect) - ($qWrong * $markWrong))
+#set($setCount = $vNumberGenerator.genInt(5, 30))
+#set($qActualMark = $setCount * $qTotalSet)
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_4_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_4_q"))
