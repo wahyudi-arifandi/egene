@@ -1,0 +1,31 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################
+## prepare elements
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($nameGender = "male")
+#else
+#set($nameGender = "female")
+#end
+#set($profession = $vTemplateGenerator.retrieveTpl("tpln_profession"))
+#set($fixSalary = $vNumberGenerator.genIntMul(50000, 200000, [100]))
+#set($fixSalaryD = $mathTool.toDouble($fixSalary) / 100)
+#set($commission = $vNumberGenerator.genInt(1, 100))
+#set($commissionD = $mathTool.toDouble($commission) / 100)
+#set($commBasic = $vNumberGenerator.genInt(1, 100))
+#set($periodMonth = $vNumberGenerator.genInt(5, 12))
+#set($monthlySalesMul = [$commBasic, 10000])
+#set($monthlySales = $vNumberGenerator.genIntMul(1000000, 20000000, $monthlySalesMul))
+#set($monthlySalesD = $mathTool.toDouble($monthlySales) / 100)
+#set($nMonthSales = $periodMonth * $monthlySales)
+#set($nMonthSalesD = $mathTool.toDouble($nMonthSales) / 100)
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_25_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_25_1_q"))
