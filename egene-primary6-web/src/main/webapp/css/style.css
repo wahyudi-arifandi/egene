@@ -2,12 +2,13 @@
 /*
 Design by http://www.hotwebsitetemplates.net
 */
-body { margin:0; padding:0; width:100%; color:#959595; font:normal 12px/1.8em "Liberation sans", Arial, Helvetica, sans-serif; background:#d4dcdf url(../images/header_bg.gif) repeat-x center top;}
+body { margin:0; padding:0; width:100%; color:#000000; font:normal 12px/1.8em "Liberation sans", Arial, Helvetica, sans-serif; background:grey;}
 html, .main { padding:0; margin:0;}
-.main { background:url(../images/footer_bg.gif) repeat-x center bottom;}
+.main { }
 .clr { clear:both; padding:0; margin:0; width:100%; font-size:0px; line-height:0px;}
 .logo { padding:0; width:auto; float:left;}
-h1 { margin:16px 0; padding:8px 16px 8px 0; color:#f6f7f7; font:bold 36px/1.2em "Liberation sans", Arial, Helvetica, sans-serif; letter-spacing:-2px; background-color:#333;}
+.logo  h1{ padding:24px 24px}
+h1 { margin:16px 0; padding:8px 16px 8px 0; color:#f6f7f7; font:bold 36px/1.2em "Liberation sans", Arial, Helvetica, sans-serif; letter-spacing:-2px; background-color:#006599;}
 h1 a, h1 a:hover { color:#f6f7f7; text-decoration:none;}
 h1 span { color:#78bbe6;}
 h1 small { display:block; font:normal 12px/1.2em "Liberation sans", Arial, Helvetica, sans-serif; letter-spacing:normal; color:#f6f7f7;}
@@ -27,22 +28,22 @@ a.print_icon  span { padding-right:24px; float:right;}
 
 /* header */
 .header { }
-.header_resize { margin:0 auto; padding:0; width:970px; background:url(../images/hbg_bg.jpg) no-repeat center top;}
+.header_resize { margin:0 auto; padding:0; width:970px; background:url(../images/hbg_bg.jpg) no-repeat center bottom;}
 img.hbg_img { padding:60px 0 60px;}
 
 /* menu */
-.menu_nav { margin:28px auto 0; padding:0; height:37px; float:right; background-color:#333;}
+.menu_nav { margin:28px auto 0; padding:0; height:37px; float:right; background-color:#006599;}
 .menu_nav ul { list-style:none; padding:0; height:37px; float:left;}
 .menu_nav ul li { margin:0; padding:0 0 0 8px; float:left;}
 .menu_nav ul li a { display:block; margin:0; padding:8px 20px; color:#e0f1f7; text-decoration:none; font-size:13px; font-weight:bold;}
 .menu_nav ul li.active a, .menu_nav ul li a:hover { color:#78bbe6;}
 
 /* content */
-.content { padding-bottom:24px;}
-.content_resize { margin:0 auto; padding:24px 0; width:970px; background-color:#fff;}
+.content { }
+.content_resize { margin:0 auto; width:970px; background-image:url(../images/cnt_bg.jpg); background-size: 100% 100%;}
 .content .mainbar { margin:0; padding:0; float:left; width:670px;}
-.content .mainbar h2 { color:#78bbe6;}
-.content .mainbar img { padding:4px; border:1px solid #f2f2f1;}
+.content .mainbar h2 { color:#595959;}
+.content .mainbar img { padding:0px; border:0px solid #f2f2f1;}
 .content .mainbar img.fl { margin:4px 16px 4px 0; float:left;}
 .content .mainbar .article { margin:0 0 24px; padding:0 20px 0 24px;}
 
@@ -94,11 +95,13 @@ table.tblstrip th.clr {background: none repeat scroll 0 0 #FFFFFF; border-right:
 .fbg .c3 { padding:0 0 0 16px; width:260px;}
 
 /* footer */
-.footer { }
-.footer_resize { margin:0 auto; padding:12px 24px; width:922px;}
-.footer p.lf { margin:0; padding:24px 0; text-align:left; width:auto; line-height:1.5em;}
+.footer {background:url(../images/fbg_bg.jpg) no-repeat center top; }
+.footer p.lf { margin:0; text-align:left; width:auto; line-height:1.5em;}
 .footer p.lf a { }
 .footer p.lf span { float:right;}
+.footer_resize { margin:0 auto; padding:32px 24px; width:922px;}
+.footer2_resize { margin:0 auto; padding:12px 24px; width:922px;}
+
 
 /* form */
 ol { list-style:none;}
@@ -114,3 +117,8 @@ ol li .send { margin:16px 0 0 0;}
 #formsearch span { display:block; margin:0; padding:0; float:left; background:url(../images/search.gif) no-repeat top left;}
 #formsearch input.editbox_search { margin:0; padding:10px 6px 12px; float:left; width:181px; border:none; background:none; font:normal 12px/1.5em "Liberation sans", Arial, Helvetica, sans-serif; color:#a8acb2;}
 #formsearch input.button_search { margin:0; padding:0; border:none; float:left;}
+
+#qtopic option { color: black;}
+.qtopic_empty { color: gray;}
+
+.epanswer { display:none;}

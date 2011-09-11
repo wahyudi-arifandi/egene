@@ -32,15 +32,19 @@
 			
 			if ($j != currPage) {
 				$("#pn_" + $j).removeClass("pselected").addClass("punselected");
+				$("#pn2_" + $j).removeClass("pselected").addClass("punselected");
 				$("#ep_num_" + $j).hide();
 			} else {
 				$("#pn_" + $j).removeClass("punselected").addClass("pselected");
+				$("#pn2_" + $j).removeClass("punselected").addClass("pselected");
 			}		
 
 			if (($j >= start) && ($j <= end)) {
 				$("#pn_" + $j).show();
+				$("#pn2_" + $j).show();
 			} else {
 				$("#pn_" + $j).hide();
+				$("#pn2_" + $j).hide();
 			}
 			
 		}
@@ -48,14 +52,57 @@
 		return false;
 	}
 
+	function showHideAnswer(id) {
+	
+		if ($(id).css("display") == "none") {
+			$(id).show();
+		} else {
+			$(id).hide();
+		}
+		return false;
+	}
+
+
 	$(document).ready(function() {
 
 		$(".mainbar_tools").hide();
+		$(".mainbar2_tools").hide();
 		$(".eps_gendate").hide();
 		$(".eps_pages").hide();
 		$("#epCount").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });	
 		$("#epCountPage").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });	
 
+		$("#qtopic").change(function () {
+			if($(this).val() == "default") {
+				$(this).addClass("qtopic_empty");
+				$("#epCount").attr('disabled', true);
+				$("#epCountPage").attr('disabled', true);
+				$("#epGen").attr('disabled', true);
+				$("#epGen").attr('src', 'images/submit-disable.gif');
+			} else {
+				$(this).removeClass("qtopic_empty")
+				$("#epCount").attr('disabled', false);
+				$("#epCountPage").attr('disabled', false);
+				$("#epGen").attr('disabled', false);
+				$("#epGen").attr('src', 'images/submit.gif');
+			}
+		});
+		$("#qtopic").change();		
+		
+		$("#epGen")
+			.mouseover(function() { 
+				var src = "images/submit-onover.gif";
+				$(this).attr("src", src);
+			})
+			.mousedown(function() { 
+				var src = "images/submit-onpress.gif";
+				$(this).attr("src", src);
+			})
+			.mouseout(function() {
+				var src = "images/submit.gif";
+				$(this).attr("src", src);
+			});
+		
 		$("#epGen").click(function() {
 		
 			if( $("#qtopic").val() == "default") {
@@ -63,6 +110,7 @@
 			}
 
 			$(".mainbar_tools").show();
+			$(".mainbar2_tools").show();
 			$(".eps_gendate").show();
 			
 			$epCount = $("#epCount").val();
@@ -74,9 +122,13 @@
 				function(xml) {
 				
 					$("#mainbar_tools").html(
-						"&nbsp;<a href='#' onclick='printPage()' class='print_icon'><span>print</span></a>"
+						"&nbsp;<a href='#' onclick='printPage()' class='print_icon'><span>print without answer</span></a>"
 					);
-				
+
+					$("#mainbar2_tools").html(
+						"&nbsp;<a href='#' onclick='printPageNoCSS()' class='print_icon'><span>print with answer</span></a>"
+					);
+					
 					$("#eps_gendate").html(
 						"&nbsp;<span>Generated on " + showDate() + "</span>");
 						
@@ -102,7 +154,9 @@
 					
 						$question = $(this).find("question").text();
 						$answer = $(this).find("answer").text();
-						$str += "<p><strong>#" + $i + "# Question:</strong><br />" + $question + "<br /><strong>Answer:</strong><br />" + $answer + "</p>";
+						$str += "<div><br /><strong>#" + $i + "# Question:</strong><br />" + $question + "</div>";
+						$str += "<div><a href='#' onclick=\"return showHideAnswer('#epanswer_" + $i + "');\"><img src='images/icon-show-hide.png'></a></div>";
+						$str += "<div class='epanswer' id='epanswer_" + $i + "'><strong>Answer:</strong><br />" + $answer + "</div>";
 						
 					});
 					
@@ -126,7 +180,7 @@
 							
 						}
 						$strP += "<a class='punselected' id='pn_last' title='page "+$p+"' href='#' onClick='"+ "changePage("+$p+", "+$p+")" +"'>&gt;&gt;</a>";
-						$("#pages").html($strP);
+						$("#pages1").html($strP);
 						
 						for ($j = 1; $j<=$p; $j++) {
 							if ($j >= 1 && $j <= 5) {
@@ -135,6 +189,29 @@
 								$("#pn_" + $j).hide();
 							}
 						}
+						
+						var $k = 0;
+						var $strP2 = "";
+						$strP2 += "<a class='punselected' id='pn2_first' title='page 1' href='#' onClick='"+ "changePage(1, "+$p+")" +"'>&lt;&lt;</a>"
+						for ($k = 1; $k <= $p; $k++) {					
+							if ($k != 1) {
+								$strP2 += "<a class='punselected' id='pn2_"+$k+"' href='#' onClick='"+ "changePage("+$k+", "+$p+")" +"'>"+$k+"</a>"
+								$("#ep_num_" + $k).hide();
+							} else {
+								$strP2 += "<a class='pselected' id='pn2_"+$k+"' href='#' onClick='"+ "changePage("+$k+", "+$p+")" +"'>"+$k+"</a>"
+							}
+							
+						}
+						$strP2 += "<a class='punselected' id='pn2_last' title='page "+$p+"' href='#' onClick='"+ "changePage("+$p+", "+$p+")" +"'>&gt;&gt;</a>";
+						$("#pages2").html($strP2);
+						
+						for ($k = 1; $k<=$p; $k++) {
+							if ($k >= 1 && $k <= 5) {
+								$("#pn2_" + $k).show();
+							} else {
+								$("#pn2_" + $k).hide();
+							}
+						}						
 					} else {
 						$(".eps_pages").hide();
 					}
@@ -145,6 +222,8 @@
 		});
 	});
 	
+	
+	
 </script>
 
 <div class="content">
@@ -153,6 +232,8 @@
 
 			<div id="mainbar_tools" class="mainbar_tools">
 			</div>
+			<div id="mainbar2_tools" class="mainbar_tools">
+			</div>
 
 			<div class="printable">
 			
@@ -160,7 +241,7 @@
 				</div>
 
 				<div class="eps_pages">&nbsp;
-					<p class="pages" id="pages">&nbsp;
+					<p class="pages" id="pages1">&nbsp;
 					</p>
 				</div>
 
@@ -169,15 +250,20 @@
 				</div>
 				
 				<div id="eps" class="eps">
-					<p>eGENE is an automatic exam paper generator. Currently it supports limited to exam peper generation of Mathematics Primary 6, for topic Decimals, based on Singapore syllabus.</p>
-					<p>eGENE generates a collection of exam paper generator randomly based on predefined templates.</p>
-					<p>To generate a collection of exam paper, please do following steps:<br />
-						1. Select topic of exam paper to be generated.<br />
-						2. Select number of questions to be generated. Allowed value is 1 till 999.<br />
-						3. Select number of questions to be displayed per page as the result. Allowed value is 1 till 99.<br />
+					<p>eGENE is an automatic exam paper generator. Currently it supports exam peper generation limited to topic Decimals on Mathematics Primary 6, based on Singapore syllabus.</p>
+					<p>eGENE generates a collection of exam paper randomly based on predefined templates.</p>
+					<p>Please do following steps:<br />
+						1. Select the topic of exam paper to be generated.<br />
+						2. Select the number of questions to be generated. Allowed value is 1 t0 999.<br />
+						3. Select the number of questions to be displayed per page as the result. Allowed value is 1 to 99.<br />
 					</p>
-					<p>To modify the existing templates or add new templates into eGENE, please go to Administration menu</p>
+					<p>To modify existing templates or add new templates into eGENE, please go to Configurations menu</p>
 				</div>
+				
+				<div class="eps_pages">&nbsp;
+					<p class="pages" id="pages2">&nbsp;
+					</p>
+				</div>				
 				
 			</div>
 
@@ -191,7 +277,7 @@
 				<form id="formsearch" name="formsearch" method="post"
 					action="search.jsp">
 					<span><input name="editbox_search" class="editbox_search"
-						id="editbox_search" maxlength="80" value="Search our site:"
+						id="editbox_search" maxlength="80" placeholder="Search our site:"
 						type="text" />
 					</span> <input name="button_search" src="images/search_btn.gif"
 						class="button_search" type="image" />
