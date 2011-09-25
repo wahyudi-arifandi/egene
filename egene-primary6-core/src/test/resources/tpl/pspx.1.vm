@@ -1,0 +1,68 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################	
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($nameGender = "male")
+#else
+#set($nameGender = "female")
+#end
+
+#set($groceries = $vTemplateGenerator.retrieveTpl("tpln_groceries"))
+
+#set($pack1RatioPer10 = $vNumberGenerator.genInt(1, 9))
+#set($pack2RatioPer10 = 10 - $pack1RatioPer10)
+
+#set($packTotalWeightDGr = $vNumberGenerator.genInt(50, 150))
+#set($packTotalWeightDGr = 10 * $packTotalWeightDGr)
+#set($packTotalWeightKg = $mathTool.toDouble($packTotalWeightDGr) / 100)
+#set($packTotalWeightKg = $vFormatter.formatDecimal($packTotalWeightKg, 1))
+
+#set($pack1TotalWeightDGr = ($mathTool.toDouble($pack1RatioPer10) / 10) * $packTotalWeightDGr)
+#set($pack1TotalWeightDGr = $mathTool.toInteger($pack1TotalWeightDGr))
+#set($pack1TotalWeightKg = $mathTool.toDouble($pack1TotalWeightDGr) / 100)
+#set($pack1TotalWeightKg = $vFormatter.formatDecimal($pack1TotalWeightKg, 2))
+#set($pack1WeightDGrOpt = $vNumberGenerator.genDivisor($pack1TotalWeightDGr))
+#set($pack1WeightDGrExcl = [$pack1TotalWeightDGr])
+#set($pack1WeightDGr = $vOptGenerator.genOptIntExcl($pack1WeightDGrOpt, $pack1WeightDGrExcl))
+#set($pack1WeightKg = $mathTool.toDouble($pack1WeightDGr) / 100)
+#set($pack1WeightKg = $vFormatter.formatDecimal($pack1WeightKg, 2))
+#set($pack1Count = $mathTool.toDouble($pack1TotalWeightDGr) / $pack1WeightDGr)
+#set($pack1Count = $mathTool.toInteger($pack1Count))
+
+#set($pack2TotalWeightDGr = ($mathTool.toDouble($pack2RatioPer10) / 10) * $packTotalWeightDGr)
+#set($pack2TotalWeightDGr = $mathTool.toInteger($pack2TotalWeightDGr))
+#set($pack2TotalWeightKg = $mathTool.toDouble($pack2TotalWeightDGr) / 100)
+#set($pack2TotalWeightKg = $vFormatter.formatDecimal($pack2TotalWeightKg, 2))
+#set($pack2WeightDGrOpt = $vNumberGenerator.genDivisor($pack2TotalWeightDGr))
+#set($pack2WeightDGrExcl = [$pack2TotalWeightDGr, $pack1WeightDGr])
+#set($pack2WeightDGr = $vOptGenerator.genOptIntExcl($pack2WeightDGrOpt, $pack2WeightDGrExcl))
+#set($pack2WeightKg = $mathTool.toDouble($pack2WeightDGr) / 100)
+#set($pack2WeightKg = $vFormatter.formatDecimal($pack2WeightKg, 2))
+#set($pack2Count = $mathTool.toDouble($pack2TotalWeightDGr) / $pack2WeightDGr)
+#set($pack2Count = $mathTool.toInteger($pack2Count))
+
+#set($packCountTotal = $pack1Count + $pack2Count)
+
+#if($pack1WeightDGr > $pack2WeightDGr)
+#set($cmp = "smaller")
+#set($packBigCountQ = $vNumberGenerator.genInt(2, $pack1Count))
+#set($packSmallCountQ = $vNumberGenerator.genInt(2, $pack2Count))
+#set($packWeightQ = ($mathTool.toDouble($packBigCountQ) * $mathTool.toDouble($pack1WeightKg)) + ($mathTool.toDouble($packSmallCountQ) * $mathTool.toDouble($pack2WeightKg)))
+#set($packWeightQ = $vFormatter.formatDecimal($packWeightQ, 2))
+#else
+#set($cmp = "bigger")
+#set($packBigCountQ = $vNumberGenerator.genInt(2, $pack2Count))
+#set($packSmallCountQ = $vNumberGenerator.genInt(2, $pack1Count))
+#set($packWeightQ = ($mathTool.toDouble($packBigCountQ) * $mathTool.toDouble($pack2WeightKg)) + ($mathTool.toDouble($packSmallCountQ) * $mathTool.toDouble($pack1WeightKg)))
+#set($packWeightQ = $vFormatter.formatDecimal($packWeightQ, 2))
+#end
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_x_1_s1")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_x_1_q"))
