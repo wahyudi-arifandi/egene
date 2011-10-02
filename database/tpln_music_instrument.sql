@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `tpln_music_instrument` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

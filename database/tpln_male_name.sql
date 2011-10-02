@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `tpln_male_name` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

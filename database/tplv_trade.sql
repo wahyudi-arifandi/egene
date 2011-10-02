@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `tplv_trade` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

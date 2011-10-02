@@ -1,8 +1,8 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `tplo_decimals_22_2_s` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `value` varchar(1024) NOT NULL,
+  `value` varchar(2048) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 

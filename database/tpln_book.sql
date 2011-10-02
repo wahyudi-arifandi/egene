@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `tpln_book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

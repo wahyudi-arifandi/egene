@@ -65,4 +65,4 @@
 #set($packWeightQ = $vFormatter.formatDecimal($packWeightQ, 2))
 #end
 ## generate exam paper
-#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_x_1_s1")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_x_1_q"))
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_25_3_s1")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_25_3_q"))
