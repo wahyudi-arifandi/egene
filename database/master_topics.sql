@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `master_topics` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

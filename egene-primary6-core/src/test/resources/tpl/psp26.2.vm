@@ -1,0 +1,55 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################	
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($nameGender = "male")
+#else
+#set($nameGender = "female")
+#end
+#set($namePronS = $vNounFormatter.genPronSubjGender($name, $nameGender))
+
+#set($currency = $escapeTool.getD())
+
+#set($tplItemTblList = ["tpln_fruit", "tpln_groceries", "tpln_meat"])
+#set($tplItemTbl = $vOptGenerator.genOptStr($tplItemTblList))
+#set($item = $vTemplateGenerator.retrieveTpl($tplItemTbl))
+#set($itemPlural = $vNounFormatter.genPlural($item))
+
+#set($priceBuyKg = $vNumberGenerator.genInt(1, 9))
+#set($priceBuyKg = 10 * $priceBuyKg)
+
+#set($weightSellGr = $vNumberGenerator.genInt(1, 14))
+#set($weightSellGr = 50 * $weightSellGr)
+
+#set($priceSellWeightGr = $vNumberGenerator.genIntMul($priceBuyKg, 200, [5]))
+#if($priceSellWeightGr < 100)
+#set($priceSellWeightGrTxt2 = "${priceSellWeightGr} / 100")
+#set($priceSellWeightGrTxt = "${priceSellWeightGr} cents")
+#else
+#set($priceSellWeightGrTxt2 = $mathTool.toDouble($priceSellWeightGr) / 100.00)
+#set($priceSellWeightGrTxt = $vFormatter.formatDecimal($priceSellWeightGrTxt2, 2))
+#set($priceSellWeightGrTxt = $currency + "$priceSellWeightGrTxt")
+#end
+
+#set($weightSellGrTotalMul = $vNumberGenerator.genInt(20, 200))
+#set($weightSellGrTotal = $weightSellGrTotalMul * $weightSellGr)
+#set($weightSellKgTotal = $mathTool.toDouble($weightSellGrTotal) / 1000.00)
+#set($weightSellKgTotal = $vFormatter.formatDecimal($weightSellKgTotal, 2))
+
+#set($revenue = $weightSellGrTotalMul * $mathTool.toDouble($priceSellWeightGr))
+#set($revenue = $revenue / 100.00)
+#set($revenue = $vFormatter.formatDecimal($revenue, 2))
+
+#set($profit = $mathTool.toDouble($revenue) - ($mathTool.toDouble($weightSellKgTotal) * (($mathTool.toDouble($priceBuyKg) / 100.00))))
+#set($profit = $vFormatter.formatDecimal($profit, 2))
+
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_26_2_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_26_2_q"))

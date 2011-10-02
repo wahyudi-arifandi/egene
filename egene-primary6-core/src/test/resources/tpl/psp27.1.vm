@@ -1,0 +1,59 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################	
+#set($tplItemTblList = ["tpln_book", "tpln_stationary", "tpln_cake"])
+#set($tplItemTbl = $vOptGenerator.genOptStr($tplItemTblList))
+#set($item = $vTemplateGenerator.retrieveTpl($tplItemTbl))
+#set($itemPlural = $vNounFormatter.genPlural($item))
+
+#set($container = $vTemplateGenerator.retrieveTpl("tpln_container"))
+
+#set($bookMassRatioDenom = $vNumberGenerator.genInt(3, 10))
+#set($bookMassRatioNumMax = $bookMassRatioDenom - 1)
+#set($bookMassRatioNum = $vNumberGenerator.genInt(1, $bookMassRatioNumMax))
+#set($bookMassRatio = [$bookMassRatioNum, $bookMassRatioDenom])
+#set($bookMassRatio = $vNumberGenerator.simplifyFraction($bookMassRatio))
+#set($bookMassRatioNum = $bookMassRatio.get(0))
+#set($bookMassRatioDenom = $bookMassRatio.get(1))
+
+#set($containerMassMul = [$bookMassRatioDenom, 10])
+#set($containerMass = $vNumberGenerator.genIntMul(500, 2000, $containerMassMul))
+#set($containerMass = $mathTool.toDouble($containerMass) / 1000.00)
+#set($containerMass = $vFormatter.formatDecimal($containerMass, 2))
+
+#set($bookMass = ($mathTool.toDouble($bookMassRatioNum) / $mathTool.toDouble($bookMassRatioDenom)) * $mathTool.toDouble($containerMass))
+##set($bookMass = 10 * $bookMass)
+#set($bookMass = $vFormatter.formatDecimal($bookMass, 2))
+
+#set($bookCountRatioDenom = $vNumberGenerator.genInt(3, 10))
+#set($bookCountRatioNumMax = $bookCountRatioDenom - 1)
+#set($bookCountRatioNum = $vNumberGenerator.genInt(1, $bookCountRatioNumMax))
+#set($bookCountRatio = [$bookCountRatioNum, $bookCountRatioDenom])
+#set($bookCountRatio = $vNumberGenerator.simplifyFraction($bookCountRatio))
+#set($bookCountRatioNum = $bookCountRatio.get(0))
+#set($bookCountRatioDenom = $bookCountRatio.get(1))
+
+#set($bookCountRatioNumX = $bookCountRatioDenom - $bookCountRatioNum)
+
+#set($itemCountTotalMul = [$bookCountRatioDenom])
+#set($itemCountTotal = $vNumberGenerator.genIntMul(10, 50, $itemCountTotalMul))
+
+#set($itemCountX = ($itemCountTotal * $bookCountRatioNumX) / $bookCountRatioDenom)
+
+#set($count1 = $mathTool.toDouble($itemCountTotal) * ($mathTool.toDouble($bookCountRatioNum) / $mathTool.toDouble($bookCountRatioDenom)))
+#set($mass1 = $count1 * $mathTool.toDouble($bookMass) + $mathTool.toDouble($containerMass))
+#set($massTotal = ($mathTool.toDouble($itemCountTotal) * $mathTool.toDouble($bookMass)) + $mathTool.toDouble($containerMass))
+#set($massTotal = $vFormatter.formatDecimal($massTotal, 2))
+#set($dMass = $mathTool.toDouble($massTotal) - $mass1)
+#set($dMass = $vFormatter.formatDecimal($dMass, 2))
+
+#set($massOneOneKg = $mathTool.toDouble($containerMass) + $mathTool.toDouble($bookMass))
+#set($massOneOneGr = 1000 * $massOneOneKg)
+
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_27_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_27_1_q"))

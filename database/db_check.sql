@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `db_check` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

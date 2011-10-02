@@ -1,4 +1,4 @@
-﻿
+﻿USE egene;
 
 CREATE TABLE `tpln_book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -11,3 +11,4 @@ insert into `tpln_book`(`id`,`value`) values (1,'dictionary');
 insert into `tpln_book`(`id`,`value`) values (2,'phone directory');
 insert into `tpln_book`(`id`,`value`) values (3,'notebook');
 insert into `tpln_book`(`id`,`value`) values (4,'exercise book');
+insert into `tpln_book`(`id`,`value`) values (5,'novel');

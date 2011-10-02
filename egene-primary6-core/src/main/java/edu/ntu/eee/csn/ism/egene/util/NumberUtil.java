@@ -1,5 +1,6 @@
 package edu.ntu.eee.csn.ism.egene.util;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -273,10 +274,32 @@ public class NumberUtil {
 
 	}
 
+	public static List<Integer> simplifyFraction(List<Integer> fraction) {
+
+		if (null == fraction || fraction.size() != 2)
+			throw new NumberUtilException("INVALID fraction: "
+					+ fraction.toString());
+
+		int gcd = NumberUtil.gcd(fraction.get(0).intValue(), fraction.get(1)
+				.intValue());
+		fraction.set(0, new Integer(fraction.get(0).intValue() / gcd));
+		fraction.set(1, new Integer(fraction.get(1).intValue() / gcd));
+
+		return fraction;
+	}
+
 	public static int removeDecimal(double num) {
 
 		return Integer.parseInt(Double.toString(num).replace(".", ""));
 
+	}
+
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<Integer>();
+		list.add(0, new Integer(3));
+		list.add(1, new Integer(9));
+		list = NumberUtil.simplifyFraction(list);
+		System.out.println(list.toString());
 	}
 
 }
