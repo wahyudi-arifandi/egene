@@ -33,7 +33,7 @@ import edu.ntu.eee.csn.ism.egene.util.Constant;
 import edu.ntu.eee.csn.ism.egene.util.DBUtil;
 import edu.ntu.eee.csn.ism.egene.util.NumberUtil;
 
-@WebServlet(description = "Check liveliness connection to database", urlPatterns = { "/SvGenerateExam" })
+@WebServlet(description = "Generate exam paper", urlPatterns = { "/SvGenerateExam" })
 public class SvGenerateExam extends HttpServlet {
 
 	private static final long serialVersionUID = -6443702586581697411L;

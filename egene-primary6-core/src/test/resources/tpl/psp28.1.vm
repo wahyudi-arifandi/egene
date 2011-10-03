@@ -1,0 +1,84 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################	
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+#set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
+#if($tplNameTbl == "tpln_male_name")
+#set($nameGender = "male")
+#else
+#set($nameGender = "female")
+#end
+#set($namePronS = $vNounFormatter.genPronSubjGender($name, $nameGender))
+#set($namePossAdj = $vNounFormatter.genPossAdjGender($name, $nameGender))
+
+#set($tplItemTblList = ["tpln_book", "tpln_stationary", "tpln_fruit"])
+#set($tplItemTbl = $vOptGenerator.genOptStr($tplItemTblList))
+#set($item1 = $vTemplateGenerator.retrieveTpl($tplItemTbl))
+
+#set($item2Excl = [$item1])
+#set($item2 = $vTemplateGenerator.retrieveTplExcl($tplItemTbl, $item2Excl))
+#set($item2Plural = $vNounFormatter.genPlural($item2))
+
+#set($item3Excl = [$item1, $item2])
+#set($item3 = $vTemplateGenerator.retrieveTplExcl($tplItemTbl, $item3Excl))
+#set($item3Plural = $vNounFormatter.genPlural($item3))
+
+#set($currency = $escapeTool.getD())
+
+#set($ratioDenom = $vNumberGenerator.genInt(4, 10))
+#set($ratioNumMax = (($ratioDenom + 1) / 2) - 1)
+#set($ratioNum = $vNumberGenerator.genInt(1, $ratioNumMax))
+#set($ratio = [$ratioNum, $ratioDenom])
+#set($ratio = $vNumberGenerator.simplifyFraction($ratio))
+#set($ratioNum = $ratio.get(0))
+#set($ratioDenom = $ratio.get(1))
+
+#set($diffDenomNum = $ratioDenom - $ratioNum)
+#set($diffDenomNumDouble = 2 * $diffDenomNum)
+#set($diff2 = $diffDenomNum - $ratioNum)
+#set($diff3 = $diffDenomNumDouble - $ratioDenom)
+#set($ratioItem1 = [$diff3, $diffDenomNumDouble])
+#set($ratioItem1 = $vNumberGenerator.simplifyFraction($ratioItem1))
+
+#set($priceItem2Mul = $vNumberGenerator.genInt(3, 9))
+
+#set($priceItem23Mul = 1 + $priceItem2Mul)
+#set($priceItem23Mul = [$ratioNum, $priceItem23Mul])
+#set($priceItem23 = $vNumberGenerator.genIntMul(1500, 2000, $priceItem23Mul))
+
+#set($priceItem3 = $priceItem23 / (1 + $priceItem2Mul))
+#set($priceItem2 = $priceItem2Mul * $priceItem3)
+
+#set($item3Count = $vOptGenerator.genOptInt($priceItem23Mul))
+
+#set($remaining1 = ($ratioDenom * $priceItem23 / $ratioNum))
+#set($halfMoney = $remaining1 - $priceItem2 - $priceItem3)
+#set($totalMoney = 2 * $halfMoney)
+
+#set($priceItem1 =  $totalMoney - $remaining1)
+
+#set($priceItem1 = $mathTool.toDouble($priceItem1) / 100.0)
+#set($priceItem1 = $vFormatter.formatDecimal($priceItem1, 2))
+#set($priceItem2 = $mathTool.toDouble($priceItem2) / 100.0)
+#set($priceItem2 = $vFormatter.formatDecimal($priceItem2, 2))
+#set($priceItem3 = $mathTool.toDouble($priceItem3) / 100.0)
+#set($priceItem3 = $vFormatter.formatDecimal($priceItem3, 2))
+#set($totalMoney = $mathTool.toDouble($totalMoney) / 100.0)
+#set($totalMoney = $vFormatter.formatDecimal($totalMoney, 2))
+#set($remaining1 = $mathTool.toDouble($remaining1) / 100.0)
+#set($remaining1 = $vFormatter.formatDecimal($remaining1, 2))
+#set($priceItem23 = $mathTool.toDouble($priceItem23) / 100.0)
+#set($priceItem23 = $vFormatter.formatDecimal($priceItem23, 2))
+
+#set($priceItem3x = $mathTool.toDouble($priceItem3) / $mathTool.toDouble($item3Count))
+#set($priceItem3x = $vFormatter.formatDecimal($priceItem3x, 2))
+
+## generate exam paper
+$name spent ${currency}$priceItem1 on a $item1.
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_28_1_1"))
