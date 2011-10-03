@@ -13,26 +13,26 @@
 
 #set($container = $vTemplateGenerator.retrieveTpl("tpln_container"))
 
-#set($bookMassRatioDenom = $vNumberGenerator.genInt(3, 10))
-#set($bookMassRatioNumMax = $bookMassRatioDenom - 1)
-#set($bookMassRatioNum = $vNumberGenerator.genInt(1, $bookMassRatioNumMax))
-#set($bookMassRatio = [$bookMassRatioNum, $bookMassRatioDenom])
-#set($bookMassRatio = $vNumberGenerator.simplifyFraction($bookMassRatio))
-#set($bookMassRatioNum = $bookMassRatio.get(0))
-#set($bookMassRatioDenom = $bookMassRatio.get(1))
+#set($containerMassRatioDenom = $vNumberGenerator.genInt(3, 10))
+#set($containerMassRatioNumMax = $containerMassRatioDenom - 1)
+#set($containerMassRatioNum = $vNumberGenerator.genInt(1, $containerMassRatioNumMax))
+#set($containerMassRatio = [$containerMassRatioNum, $containerMassRatioDenom])
+#set($containerMassRatio = $vNumberGenerator.simplifyFraction($containerMassRatio))
+#set($containerMassRatioNum = $containerMassRatio.get(0))
+#set($containerMassRatioDenom = $containerMassRatio.get(1))
 
 #if($containerMassRatioDenom == 10)
 #set($bookMassMul = [100])
 #else
 #set($bookMassMul = [$containerMassRatioDenom, 10])
 #end
-#set($containerMass = $vNumberGenerator.genIntMul(500, 2000, $containerMassMul))
-#set($containerMass = $mathTool.toDouble($containerMass) / 1000.00)
-#set($containerMass = $vFormatter.formatDecimal($containerMass, 2))
-
-#set($bookMass = ($mathTool.toDouble($bookMassRatioNum) / $mathTool.toDouble($bookMassRatioDenom)) * $mathTool.toDouble($containerMass))
-##set($bookMass = 10 * $bookMass)
+#set($bookMass = $vNumberGenerator.genIntMul(500, 2000, $bookMassMul))
+#set($bookMass = $mathTool.toDouble($bookMass) / 1000.00)
 #set($bookMass = $vFormatter.formatDecimal($bookMass, 2))
+
+#set($containerMass = ($mathTool.toDouble($containerMassRatioNum) / $mathTool.toDouble($containerMassRatioDenom)) * $mathTool.toDouble($bookMass))
+##set($bookMass = 10 * $bookMass)
+#set($containerMass = $vFormatter.formatDecimal($contanerMass, 2))
 
 #set($bookCountRatioDenom = $vNumberGenerator.genInt(3, 10))
 #set($bookCountRatioNumMax = $bookCountRatioDenom - 1)
@@ -57,9 +57,8 @@
 #set($dMass = $vFormatter.formatDecimal($dMass, 2))
 
 #set($massOneOneKg = $mathTool.toDouble($containerMass) + $mathTool.toDouble($bookMass))
-#set($massOneOneKg = $vFormatter.formatDecimal($massOneOneKg, 2))
 #set($massOneOneGr = 1000.00 * $mathTool.toDouble($massOneOneKg))
 #set($massOneOneGr = $mathTool.roundToInt($massOneOneGr))
 
 ## generate exam paper
-#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_27_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_27_1_q"))
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_27_2_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_27_2_q"))

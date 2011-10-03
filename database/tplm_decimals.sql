@@ -22,3 +22,4 @@ insert into `tplm_decimals`(`id`,`value`) values (12,'psp25.3.vm');
 insert into `tplm_decimals`(`id`,`value`) values (13,'psp26.1.vm');
 insert into `tplm_decimals`(`id`,`value`) values (14,'psp26.2.vm');
 insert into `tplm_decimals`(`id`,`value`) values (15,'psp27.1.vm');
+insert into `tplm_decimals`(`id`,`value`) values (16,'psp27.2.vm');
