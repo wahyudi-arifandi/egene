@@ -25,8 +25,9 @@
 
 #set($priceBuyKg = $vNumberGenerator.genInt(1, 10))
 
+#set($priceBuyKgMin = $priceBuyKg + 1)
 #set($priceSellKgMax = 2 * $priceBuyKg)
-#set($priceSellKg = $vNumberGenerator.genInt($priceBuyKg, $priceSellKgMax))
+#set($priceSellKg = $vNumberGenerator.genInt($priceBuyKgMin, $priceSellKgMax))
 #set($weightSellGr = $vNumberGenerator.genInt(1, 50))
 #set($weightSellGr = 10 * $weightSellGr)
 #set($priceSellWeightGr = $mathTool.toDouble($priceSellKg) * ($mathTool.toDouble($weightSellGr) / 1000.00))
@@ -37,11 +38,11 @@
 #set($weightSellGrTotal = $mathTool.toDouble($weightSellGrTotal) / 1000.00)
 #set($weightSellGrTotal = $vFormatter.formatDecimal($weightSellGrTotal, 2))
 
-#set($revenue = $weightSellGrTotalMul * $mathTool.toDouble($priceSellWeightGr))
+#set($revenue = $mathTool.toDouble($weightSellGrTotalMul) * $mathTool.toDouble($priceSellWeightGr))
 #set($revenue = $vFormatter.formatDecimal($revenue, 2))
 
 #set($profit = $mathTool.toDouble($revenue) - ($mathTool.toDouble($weightSellGrTotal) * $priceBuyKg))
 #set($profit = $vFormatter.formatDecimal($profit, 2))
 
 ## generate exam paper
-#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_26_2_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_26_2_q"))
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_26_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_26_1_q"))
