@@ -37,7 +37,7 @@ Design by http://www.hotwebsitetemplates.net
       <div class="menu_nav">
         <ul>
 			<%
-				String[] pathMenu = {"index.jsp", "cfg.jsp", "about.jsp"};
+				String[] pathMenu = {"index.jsp", "#", "#"};
 				String[] menu = {"Home", "Configurations", "About"};
 				List<String> lPathMenu = Arrays.asList(pathMenu);
 				List<String> lMenu = Arrays.asList(menu);

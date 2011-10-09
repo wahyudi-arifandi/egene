@@ -16,6 +16,7 @@ public enum Constant {
 	TABLE_REF_OTHER_NAME_PREFIX("tplo_"),
 	TABLE_REF_C_ID("id"),
 	TABLE_REF_C_VALUE("value"),
+	TABLE_REF_C_VALUE_TYPE("value_type"),
 	
 	TABLE_SELECT_START_ROW("start_row"),
 	TABLE_SELECT_COUNT("count"),
