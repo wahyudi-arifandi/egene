@@ -268,7 +268,7 @@ public class NumberUtil {
 			return lcm(num.get(0).intValue(), num.get(1).intValue());
 		} else {
 			int arg0 = num.get(0).intValue();
-			List<Integer> remain = num.subList(1, num.size() - 1);
+			List<Integer> remain = num.subList(1, num.size());
 			return lcm(arg0, lcm(remain));
 		}
 
@@ -296,10 +296,10 @@ public class NumberUtil {
 
 	public static void main(String[] args) {
 		List<Integer> list = new ArrayList<Integer>();
-		list.add(0, new Integer(3));
-		list.add(1, new Integer(9));
-		list = NumberUtil.simplifyFraction(list);
-		System.out.println(list.toString());
+		list.add(0, new Integer(1));
+		list.add(1, new Integer(8));
+		list.add(2, new Integer(6));
+		System.out.println(NumberUtil.lcm(list));
 	}
 
 }

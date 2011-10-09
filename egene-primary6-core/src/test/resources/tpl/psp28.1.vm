@@ -49,13 +49,16 @@
 #set($priceItem2Mul = $vNumberGenerator.genInt(3, 9))
 
 #set($priceItem23Mul = 1 + $priceItem2Mul)
-#set($priceItem23Mul = [$ratioNum, $priceItem23Mul])
-#set($priceItem23 = $vNumberGenerator.genIntMul(1500, 2000, $priceItem23Mul))
+#set($countExcl = [$ratioNum, $priceItem23Mul])
+#set($count = $vNumberGenerator.genIntExcl(2, 15, $countExcl))
 
+#set($priceItem23Mul = [$ratioNum, $priceItem23Mul, $count])
+#set($priceItem23 = $vNumberGenerator.genIntMul(1500, 2000, $priceItem23Mul))
 #set($priceItem3 = $priceItem23 / (1 + $priceItem2Mul))
 #set($priceItem2 = $priceItem2Mul * $priceItem3)
 
-#set($item3Count = $vOptGenerator.genOptInt($priceItem23Mul))
+#set($item2Count = $count)
+#set($item3Count = $count)
 
 #set($remaining1 = ($ratioDenom * $priceItem23 / $ratioNum))
 #set($halfMoney = $remaining1 - $priceItem2 - $priceItem3)
@@ -76,6 +79,8 @@
 #set($priceItem23 = $mathTool.toDouble($priceItem23) / 100.0)
 #set($priceItem23 = $vFormatter.formatDecimal($priceItem23, 2))
 
+#set($priceItem2x = $mathTool.toDouble($priceItem2) / $mathTool.toDouble($item2Count))
+#set($priceItem2x = $vFormatter.formatDecimal($priceItem2x, 2))
 #set($priceItem3x = $mathTool.toDouble($priceItem3) / $mathTool.toDouble($item3Count))
 #set($priceItem3x = $vFormatter.formatDecimal($priceItem3x, 2))
 
