@@ -1,0 +1,68 @@
+## Template For eGENE
+##
+## References:
+## http://velocity.apache.org/engine/releases/velocity-1.7/user-guide.html
+## http://velocity.apache.org/engine/releases/velocity-1.7/vtl-reference-guide.html
+##
+##############################
+##############################	
+#set($tplNameTblList = ["tpln_male_name", "tpln_female_name"])
+
+#set($tplNameTbl1 = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name1 = $vTemplateGenerator.retrieveTpl($tplNameTbl1))
+#if($tplNameTbl1 == "tpln_male_name")
+#set($nameGender1 = "male")
+#else
+#set($nameGender1 = "female")
+#end
+#set($namePronS1 = $vNounFormatter.genPronSubjGender($name1, $nameGender1))
+#set($namePronO1 = $vNounFormatter.genPronObjGender($name1, $nameGender1))
+#set($namePossAdj1 = $vNounFormatter.genPossAdjGender($name1, $nameGender1))
+
+#set($tplNameTbl2 = $vOptGenerator.genOptStr($tplNameTblList))
+#set($name2 = $vTemplateGenerator.retrieveTpl($tplNameTbl2))
+#if($tplNameTbl2 == "tpln_male_name")
+#set($nameGender2 = "male")
+#else
+#set($nameGender2 = "female")
+#end
+#set($namePronS2 = $vNounFormatter.genPronSubjGender($name2, $nameGender2))
+#set($namePronO2 = $vNounFormatter.genPronObjGender($name2, $nameGender2))
+#set($namePossAdj2 = $vNounFormatter.genPossAdjGender($name2, $nameGender2))
+
+#set($tplFluid = $vTemplateGenerator.retrieveTpl("tpln_fluide"))
+#set($tplContainerFluide = $vTemplateGenerator.retrieveTpl("tpln_container_fluide"))
+
+#set($ratioDenom = $vNumberGenerator.genInt(2, 10))
+#set($ratioNum = $vNumberGenerator.genInt(1, $ratioDenom))
+#set($ratio = [$ratioNum, $ratioDenom])
+#set($ratio = $vNumberGenerator.simplifyFraction($ratio))
+#set($ratioNum = $ratio.get(0))
+#set($ratioDenom = $ratio.get(1))
+#set($diff = $ratioDenom - $ratioNum)
+
+#set($item1WMul = [$ratioDenom])
+#set($item1W = $vNumberGenerator.genIntMul(50, 200, $item1WMul))
+#set($item2W = ($item1W * $ratioNum) / $ratioDenom)
+#set($containerW = $vNumberGenerator.genInt(1, 20))
+
+#set($item1WBruto = $item1W + $containerW)
+#set($item2WBruto = $item2W + $containerW)
+#set($diff2 = $item1WBruto - $item2WBruto)
+
+#set($item1W = $mathTool.toDouble($item1W) / 10.0)
+#set($item1W = $vFormatter.formatDecimal($item1W, 2))
+#set($item2W = $mathTool.toDouble($item2W) / 10.0)
+#set($item2W = $vFormatter.formatDecimal($item2W, 2))
+#set($containerW = $mathTool.toDouble($containerW) / 10.0)
+#set($containerW = $vFormatter.formatDecimal($containerW, 2))
+#set($item1WBruto = $mathTool.toDouble($item1WBruto) / 10.0)
+#set($item1WBruto = $vFormatter.formatDecimal($item1WBruto, 2))
+#set($item2WBruto = $mathTool.toDouble($item2WBruto) / 10.0)
+#set($item2WBruto = $vFormatter.formatDecimal($item2WBruto, 2))
+
+#set($diff2 = $mathTool.toDouble($diff2) / 10.0)
+#set($diff2 = $vFormatter.formatDecimal($diff2, 2))
+
+## generate exam paper
+#evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_29_1_1"))

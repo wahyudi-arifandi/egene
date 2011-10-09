@@ -25,9 +25,9 @@
 
 #set($priceBuyKg = $vNumberGenerator.genInt(1, 10))
 
-#set($priceBuyKgMin = $priceBuyKg + 1)
+#set($priceSellKgMin = $priceBuyKg + 1)
 #set($priceSellKgMax = 2 * $priceBuyKg)
-#set($priceSellKg = $vNumberGenerator.genInt($priceBuyKgMin, $priceSellKgMax))
+#set($priceSellKg = $vNumberGenerator.genInt($priceSellKgMin, $priceSellKgMax))
 #set($weightSellGr = $vNumberGenerator.genInt(1, 50))
 #set($weightSellGr = 10 * $weightSellGr)
 #set($priceSellWeightGr = $mathTool.toDouble($priceSellKg) * ($mathTool.toDouble($weightSellGr) / 1000.00))
