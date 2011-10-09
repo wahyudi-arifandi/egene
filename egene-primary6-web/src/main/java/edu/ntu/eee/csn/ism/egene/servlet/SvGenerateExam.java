@@ -32,6 +32,7 @@ import edu.ntu.eee.csn.ism.egene.tpl.VelocityBaseEngine;
 import edu.ntu.eee.csn.ism.egene.util.Constant;
 import edu.ntu.eee.csn.ism.egene.util.DBUtil;
 import edu.ntu.eee.csn.ism.egene.util.NumberUtil;
+import edu.ntu.eee.csn.ism.egene.util.SeedRoot;
 
 @WebServlet(description = "Generate exam paper", urlPatterns = { "/SvGenerateExam" })
 public class SvGenerateExam extends HttpServlet {
@@ -139,8 +140,8 @@ public class SvGenerateExam extends HttpServlet {
 		return count;
 	}
 
-	private List<String> getTemplateFile(String tableName) {
-		List<String> list = new ArrayList<String>();
+	private List<SeedRoot> getTemplateFile(String qtype) {
+		List<SeedRoot> list = new ArrayList<SeedRoot>();
 
 		DBUtil dbUtil = DBUtil.getInstance();
 		Connection conn = null;
@@ -150,14 +151,26 @@ public class SvGenerateExam extends HttpServlet {
 			conn = dbUtil.getConnection();
 			stmt = conn.createStatement();
 
-			String sql = "SELECT " + Constant.TABLE_REF_C_VALUE.toString()
-					+ " FROM " + tableName;
+			String sql = null;
+			if ("review".equalsIgnoreCase(qtype)) {
+				sql = "SELECT " + Constant.TABLE_REF_C_VALUE.toString() + ", "
+						+ Constant.TABLE_REF_C_VALUE_TYPE
+						+ " FROM TPLM_DECIMALS";
+			} else {
+				sql = "SELECT " + Constant.TABLE_REF_C_VALUE.toString() + ", "
+						+ Constant.TABLE_REF_C_VALUE_TYPE
+						+ " FROM TPLM_DECIMALS WHERE QUESTION_TYPE='" + qtype
+						+ "'";
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("sql: " + sql);
 			}
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				list.add(rs.getString(1).trim());
+				String value = rs.getString(1).trim();
+				int valueType = rs.getInt(2);
+
+				list.add(new SeedRoot(value, valueType));
 			}
 		} catch (SQLException e) {
 			if (LOGGER.isEnabledFor(Level.ERROR))
@@ -187,24 +200,26 @@ public class SvGenerateExam extends HttpServlet {
 
 			int epCount = this.getExamPaperCount(request
 					.getParameter("epcount"));
-			String tableName = request.getParameter("tablename");
+			String qtype = request.getParameter("qtype");
 			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("tablename=[" + tableName + "]; epcount=["
-						+ epCount + "]");
+				LOGGER.debug("qtype=[" + qtype + "]; epcount=[" + epCount + "]");
 
-			List<String> tplFile = this.getTemplateFile(tableName);
+			List<SeedRoot> tplFile = this.getTemplateFile(qtype);
 
 			if (tplFile.size() > 0) {
 				VelocityBaseEngine ve = new VelocityBaseEngine();
 				// String file = "unittest.vm";
 				for (int i = 0; i < epCount; i++) {
 
-					// String file = "psp21.1.vm";
 					int idx = NumberUtil.generateInt(0, tplFile.size() - 1);
-
-					String str = ve
-							.generateFromTemplateFile(this.templateDirName
-									+ File.separator + tplFile.get(idx));
+					SeedRoot sr = tplFile.get(idx);
+					String str = null;
+					if (sr.getValueType() == 1) {
+						str = ve.generateFromTemplateFile(this.templateDirName
+								+ File.separator + sr.getValue());
+					} else {
+						str = ve.generateFromTemplateString(sr.getValue());
+					}
 					if (LOGGER.isDebugEnabled())
 						LOGGER.debug("generate: [" + str + "]");
 

@@ -114,11 +114,11 @@
 			$(".eps_gendate").show();
 			
 			$epCount = $("#epCount").val();
-			$tableName = $("#qtopic").val();
+			$qtype = $("#qtopic").val();
 			$epCountPage = $("#epCountPage").val();
 			$.post(
 				"SvGenerateExam", 
-				{epcount : $epCount, tablename : $tableName},
+				{epcount : $epCount, qtype : $qtype},
 				function(xml) {
 				
 					$("#mainbar_tools").html(
@@ -290,10 +290,30 @@
 				<div class="clr"></div>
 				<form action="#" method="post" id="sendemail">
 					<ol>
-						<li><label for="qtopic">Topic</label> <select id="qtopic"
+						<li><label for="qtopic">Question Type</label> <select id="qtopic"
 							name="qtopic">
 								<option id="default" value="default" selected>-- select --</option>
-								<option id="decimals" value="tplm_decimals">Decimals</option>
+								<option id="review" value="review">Review</option>
+								<!-- 
+								<option id="psp21.1.vm" value="psp21.1.vm">psp21.1</option>
+								<option id="psp22.1.vm" value="psp22.1.vm">psp22.1</option>
+								<option id="psp22.2.vm" value="psp22.2.vm">psp22.2</option>
+								<option id="psp22.3.vm" value="psp22.3.vm">psp22.3</option>
+								<option id="psp23.1.vm" value="psp23.1.vm">psp23.1</option>
+								<option id="psp23.2.vm" value="psp23.2.vm">psp23.2</option>
+								<option id="psp23.3.vm" value="psp23.3.vm">psp23.3</option>
+								<option id="psp23.4.vm" value="psp23.4.vm">psp23.4</option>
+								<option id="psp24.1.vm" value="psp24.1.vm">psp24.1</option>
+								<option id="psp25.1.vm" value="psp25.1.vm">psp25.1</option>
+								<option id="psp25.2.vm" value="psp25.2.vm">psp25.2</option>
+								<option id="psp25.3.vm" value="psp25.3.vm">psp25.3</option>
+								 -->
+								<option id="psp26.1.vm" value="psp26.1.vm">psp26.1</option>
+								<option id="psp26.2.vm" value="psp26.2.vm">psp26.2</option>
+								<option id="psp27.1.vm" value="psp27.1.vm">psp27.1</option>
+								<option id="psp27.2.vm" value="psp27.2.vm">psp27.2</option>
+								<option id="psp28.1.vm" value="psp28.1.vm">psp28.1</option>
+								<option id="psp29.1.vm" value="psp29.1.vm">psp29.1</option>
 						</select></li>
 						<li><label for="epCount">number of questions to be
 								generated</label> <input id="epCount" name="epCount" maxlength="3"
