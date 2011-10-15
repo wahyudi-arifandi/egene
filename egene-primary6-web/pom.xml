@@ -169,7 +169,7 @@
 						</manifestEntries>
 					</archive>
 					<filters>
-						<filter>${basedir}/configurations/dev-filter.properties</filter>
+						<filter>${basedir}/configurations/prod-filter.properties</filter>
 					</filters>
 					<nonFilteredFileExtensions>
 						<!-- default value contains jpg,jpeg,gif,bmp,png -->

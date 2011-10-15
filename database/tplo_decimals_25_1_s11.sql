@@ -7,5 +7,5 @@ CREATE TABLE `tplo_decimals_25_1_s11` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 
-insert into `tplo_decimals_25_1_s11`(`id`,`value`) values (1,'#upperFirst($vNounFormatter.genPronSubjGender($name, $nameGender)) receives a fixed salary $escapeTool.getD()$vFormatter.formatDecimal($fixSalaryD, 2) each month.');
-insert into `tplo_decimals_25_1_s11`(`id`,`value`) values (2,'#upperFirst($vNounFormatter.genPronSubjGender($name, $nameGender)) receives a fixed salary $escapeTool.getD()$vFormatter.formatDecimal($fixSalaryD, 2) a month.');
+insert into `tplo_decimals_25_1_s11`(`id`,`value`) values (1,'#upperFirst($namePronS) receives a fixed salary ${currency}$fixSalaryD a month.');
+insert into `tplo_decimals_25_1_s11`(`id`,`value`) values (2,'#upperFirst($namePronS) receives a fixed salary ${currency}$fixSalaryD each month.');

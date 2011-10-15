@@ -153,9 +153,11 @@ public class SvGenerateExam extends HttpServlet {
 
 			String sql = null;
 			if ("review".equalsIgnoreCase(qtype)) {
-				sql = "SELECT " + Constant.TABLE_REF_C_VALUE.toString() + ", "
+				sql = "SELECT "
+						+ Constant.TABLE_REF_C_VALUE.toString()
+						+ ", "
 						+ Constant.TABLE_REF_C_VALUE_TYPE
-						+ " FROM tplm_decimals";
+						+ " FROM tplm_decimals WHERE QUESTION_TYPE IN ('psp25.1.vm', 'psp25.2.vm', 'psp25.3.vm', 'psp26.1.vm', 'psp26.2.vm', 'psp27.1.vm', 'psp27.2.vm', 'psp28.1.vm', 'psp29.1.vm')";
 			} else {
 				sql = "SELECT " + Constant.TABLE_REF_C_VALUE.toString() + ", "
 						+ Constant.TABLE_REF_C_VALUE_TYPE

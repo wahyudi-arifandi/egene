@@ -15,19 +15,45 @@
 #else
 #set($nameGender = "female")
 #end
+#set($namePronS = $vNounFormatter.genPronSubjGender($name, $nameGender))
+#set($namePossAdj = $vNounFormatter.genPossAdjGender($name, $nameGender))
+
+#set($currency = $escapeTool.getD())
+
 #set($profession = $vTemplateGenerator.retrieveTpl("tpln_profession"))
+
 #set($fixSalary = $vNumberGenerator.genIntMul(50000, 200000, [100]))
 #set($fixSalaryD = $mathTool.toDouble($fixSalary) / 100)
+
 #set($commission = $vNumberGenerator.genInt(1, 100))
 #set($commissionD = $mathTool.toDouble($commission) / 100)
+
 #set($commBasic = $vNumberGenerator.genInt(1, 100))
 #set($periodMonth = $vNumberGenerator.genInt(5, 12))
+
 #set($monthlySalesMul = [$commBasic, 10000])
 #set($monthlySales = $vNumberGenerator.genIntMul(1000000, 20000000, $monthlySalesMul))
 #set($monthlySalesD = $mathTool.toDouble($monthlySales) / 100)
+
 #set($nMonthSales = $periodMonth * $monthlySales)
 #set($nMonthSalesD = $mathTool.toDouble($nMonthSales) / 100)
-#set($monthlyEarnings = $fixSalary + (($commission * $monthlySales) / (100 * $commBasic)))
+
+#set($commissionTotal = ($commission * $monthlySales) / (100 * $commBasic))
+#set($commissionTotalD = $mathTool.toDouble($commissionTotal) / 100)
+
+#set($nCommissionTotal = $periodMonth * $commissionTotal)
+#set($nCommissionTotalD = $mathTool.toDouble($nCommissionTotal) / 100)
+
+#set($monthlyEarnings = $fixSalary + $commissionTotal)
 #set($monthlyEarningsD = $mathTool.toDouble($monthlyEarnings) / 100)
+
+#set($commBasic = $vFormatter.formatDecimal($commBasic, 2))
+#set($commissionD = $vFormatter.formatDecimal($commissionD, 2))
+#set($commissionTotalD = $vFormatter.formatDecimal($commissionTotalD, 2))
+#set($nCommissionTotalD = $vFormatter.formatDecimal($nCommissionTotalD, 2))
+#set($nMonthSalesD = $vFormatter.formatDecimal($nMonthSalesD, 2))
+#set($monthlyEarningsD = $vFormatter.formatDecimal($monthlyEarningsD, 2))
+#set($fixSalaryD = $vFormatter.formatDecimal($fixSalaryD, 2))
+
 ## generate exam paper
 #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_25_2_s1")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_25_2_q"))
