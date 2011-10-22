@@ -3,10 +3,6 @@ package edu.ntu.eee.csn.ism.egene.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,20 +15,17 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import edu.ntu.eee.csn.ism.egene.config.Config;
 import edu.ntu.eee.csn.ism.egene.config.ConfigParam;
 import edu.ntu.eee.csn.ism.egene.exception.ConfigException;
-import edu.ntu.eee.csn.ism.egene.exception.DBException;
 import edu.ntu.eee.csn.ism.egene.exception.EgeneWebException;
 import edu.ntu.eee.csn.ism.egene.exception.VelocityBaseException;
 import edu.ntu.eee.csn.ism.egene.tpl.VelocityBaseEngine;
-import edu.ntu.eee.csn.ism.egene.util.Constant;
-import edu.ntu.eee.csn.ism.egene.util.DBUtil;
-import edu.ntu.eee.csn.ism.egene.util.NumberUtil;
-import edu.ntu.eee.csn.ism.egene.util.SeedRoot;
+import edu.ntu.eee.csn.ism.egene.util.TplmDecimals;
 
 @WebServlet(description = "Generate exam paper", urlPatterns = { "/SvGenerateExam" })
 public class SvGenerateExam extends HttpServlet {
@@ -42,6 +35,34 @@ public class SvGenerateExam extends HttpServlet {
 
 	private Config config = Config.getInstance();
 	private String templateDirName = null;
+
+	private class QAggregate {
+		private TplmDecimals tpl = null;
+		private int count = 0;
+
+		public QAggregate(TplmDecimals tpl, int count) {
+			this.tpl = tpl;
+			this.count = count;
+		}
+
+		public TplmDecimals getTpl() {
+			return this.tpl;
+		}
+
+		public void decrease() {
+			this.count--;
+		}
+
+		public int getCount() {
+			return this.count;
+		}
+
+		@Override
+		public String toString() {
+			return "<" + this.tpl.getId() + "," + Integer.toString(this.count)
+					+ ">";
+		}
+	}
 
 	@Override
 	public void init() {
@@ -115,142 +136,114 @@ public class SvGenerateExam extends HttpServlet {
 
 	}
 
-	private int getExamPaperCount(String epCount) {
-
-		int count = 0;
-		try {
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("epCount=[" + epCount + "]");
-			count = Integer.parseInt(epCount);
-		} catch (RuntimeException e) {
-			if (LOGGER.isEnabledFor(Level.WARN)) {
-				LOGGER.warn(e.getMessage());
-			}
-		} finally {
-			if (count == 0) {
-				count = this.config
-						.getInt(ConfigParam.EGENE_DEFAULT_GENERATED_QUESTION_COUNT);
-				if (LOGGER.isEnabledFor(Level.WARN)) {
-					LOGGER.warn("USE DEFAULT epCount from "
-							+ ConfigParam.EGENE_DEFAULT_GENERATED_QUESTION_COUNT
-									.getName() + "=" + count);
-				}
-			}
-		}
-		return count;
-	}
-
-	private List<SeedRoot> getTemplateFile(String qtype) {
-		List<SeedRoot> list = new ArrayList<SeedRoot>();
-
-		DBUtil dbUtil = DBUtil.getInstance();
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			conn = dbUtil.getConnection();
-			stmt = conn.createStatement();
-
-			String sql = null;
-			if ("review".equalsIgnoreCase(qtype)) {
-				sql = "SELECT "
-						+ Constant.TABLE_REF_C_VALUE.toString()
-						+ ", "
-						+ Constant.TABLE_REF_C_VALUE_TYPE
-						+ " FROM tplm_decimals WHERE QUESTION_TYPE IN ('psp25.1.vm', 'psp25.2.vm', 'psp25.3.vm', 'psp26.1.vm', 'psp26.2.vm', 'psp27.1.vm', 'psp27.2.vm', 'psp28.1.vm', 'psp29.1.vm')";
-			} else {
-				sql = "SELECT " + Constant.TABLE_REF_C_VALUE.toString() + ", "
-						+ Constant.TABLE_REF_C_VALUE_TYPE
-						+ " FROM tplm_decimals WHERE QUESTION_TYPE='" + qtype
-						+ "'";
-			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("sql: " + sql);
-			}
-			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				String value = rs.getString(1).trim();
-				int valueType = rs.getInt(2);
-
-				list.add(new SeedRoot(value, valueType));
-			}
-		} catch (SQLException e) {
-			if (LOGGER.isEnabledFor(Level.ERROR))
-				LOGGER.error(e.getMessage(), e);
-		} catch (DBException e) {
-			if (LOGGER.isEnabledFor(Level.ERROR))
-				LOGGER.error(e.getMessage(), e);
-		} finally {
-			dbUtil.closeResultSet(rs);
-			dbUtil.closeStatement(stmt);
-			dbUtil.closeConnection(conn);
-		}
-
-		return list;
-	}
-
 	private void generateExam(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		StringWriter sw = null;
+		XMLOutputFactory xof = null;
+		XMLStreamWriter xtw = null;
 		try {
 
-			StringWriter sw = new StringWriter();
-			XMLOutputFactory xof = XMLOutputFactory.newInstance();
-			XMLStreamWriter xtw = null;
+			sw = new StringWriter();
+			xof = XMLOutputFactory.newInstance();
 			xtw = xof.createXMLStreamWriter(sw);
 			xtw.writeStartElement("egene");
 			xtw.writeStartElement("eps");
 
-			int epCount = this.getExamPaperCount(request
-					.getParameter("epcount"));
-			String qtype = request.getParameter("qtype");
+			String qtypes = request.getParameter("qtypes").trim();
 			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("qtype=[" + qtype + "]; epcount=[" + epCount + "]");
+				LOGGER.debug("qtypes=[" + qtypes + "]");
+			if (null == qtypes)
+				return;
 
-			List<SeedRoot> tplFile = this.getTemplateFile(qtype);
+			try {
+				List<QAggregate> list = new ArrayList<QAggregate>();
+				String[] arQtypes = qtypes.split("\\|");
+				for (int i = 0; i < arQtypes.length; i++) {
 
-			if (tplFile.size() > 0) {
-				VelocityBaseEngine ve = new VelocityBaseEngine();
-				// String file = "unittest.vm";
-				for (int i = 0; i < epCount; i++) {
+					String[] qtypeElm = arQtypes[i].split(";");
+					int id = Integer.parseInt(qtypeElm[0]);
+					int count = Integer.parseInt(qtypeElm[1]);
 
-					int idx = NumberUtil.generateInt(0, tplFile.size() - 1);
-					SeedRoot sr = tplFile.get(idx);
-					String str = null;
-					if (sr.getValueType() == 1) {
-						str = ve.generateFromTemplateFile(this.templateDirName
-								+ File.separator + sr.getValue());
-					} else {
-						str = ve.generateFromTemplateString(sr.getValue());
-					}
-					if (LOGGER.isDebugEnabled())
-						LOGGER.debug("generate: [" + str + "]");
-
-					if (null != str && str.length() > 0) {
-						String[] arrStr = str.split("\\|\\|");
-						xtw.writeStartElement("ep");
-
-						xtw.writeStartElement("question");
-						xtw.writeCharacters(arrStr[0].trim());
-						xtw.writeEndElement();
-
-						xtw.writeStartElement("answer");
-						if (arrStr.length > 1)
-							xtw.writeCharacters(arrStr[1].trim());
-						xtw.writeEndElement();
-
-						xtw.writeEndElement();
-					} else {
-						if (LOGGER.isEnabledFor(Level.WARN))
-							LOGGER.warn("IGNORE NULL or EMPTY exam paper");
+					if (count > 0) {
+						TplmDecimals tpl = TplmDecimals.getTplmDecimals(id);
+						QAggregate aggr = new QAggregate(tpl, count);
+						list.add(aggr);
 					}
 				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("list=" + list);
+				}
+
+				if (null != list && list.size() > 0) {
+
+					int idx = 0;
+					while (list.size() > 0) {
+
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("idx=[" + idx + "]; list=" + list);
+						}
+						QAggregate aggr = list.get(idx);
+
+						TplmDecimals tpl = aggr.getTpl();
+						VelocityBaseEngine ve = new VelocityBaseEngine();
+						String str = null;
+						if (tpl.getValueType() == 1) {
+							str = ve.generateFromTemplateFile(this.templateDirName
+									+ File.separator + tpl.getValue());
+						} else {
+							str = ve.generateFromTemplateString(tpl.getValue());
+						}
+						if (LOGGER.isDebugEnabled())
+							LOGGER.debug("generate: [" + str + "]");
+
+						if (!StringUtils.isEmpty(str)) {
+							String[] arrStr = str.split("\\|\\|");
+							xtw.writeStartElement("ep");
+
+							xtw.writeStartElement("question");
+							xtw.writeCharacters(arrStr[0].trim());
+							xtw.writeEndElement();
+
+							xtw.writeStartElement("answer");
+							if (arrStr.length > 1)
+								xtw.writeCharacters(arrStr[1].trim());
+							xtw.writeEndElement();
+
+							xtw.writeEndElement();
+						} else {
+							if (LOGGER.isEnabledFor(Level.WARN))
+								LOGGER.warn("IGNORE NULL or EMPTY exam paper");
+						}
+
+						aggr.decrease();
+						if (0 == aggr.getCount()) {
+							list.remove(aggr);
+						}
+
+						if (list.size() > 0) {
+							if (idx == list.size()) {
+								idx = 0;
+							} else {
+								idx = (idx + 1) % list.size();
+							}
+						}
+					}
+					// list.size() == 0
+
+				} else {
+					if (LOGGER.isEnabledFor(Level.WARN))
+						LOGGER.warn("IGNORE NULL or EMPTY exam paper");
+				}
+
+			} catch (RuntimeException e) {
+				if (LOGGER.isEnabledFor(Level.ERROR))
+					LOGGER.error(e.getMessage(), e);
 			}
 
 			xtw.writeEndElement();
 			xtw.writeEndElement();
 			xtw.writeEndDocument();
-			xtw.flush();
-			xtw.close();
 
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("SERVLET-OUTPUT=" + sw.toString());
@@ -264,6 +257,20 @@ public class SvGenerateExam extends HttpServlet {
 			if (LOGGER.isEnabledFor(Level.ERROR))
 				LOGGER.error(e.getMessage(), e);
 			throw new EgeneWebException(e.getMessage(), e);
+		} finally {
+
+			try {
+				xtw.flush();
+				xtw.close();
+				sw.close();
+			} catch (XMLStreamException e) {
+				if (LOGGER.isEnabledFor(Level.ERROR))
+					LOGGER.error(e.getMessage(), e);
+			} catch (IOException e) {
+				if (LOGGER.isEnabledFor(Level.ERROR))
+					LOGGER.error(e.getMessage(), e);
+			}
+
 		}
 
 	}

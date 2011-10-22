@@ -1,10 +1,35 @@
+<%@ page import="edu.ntu.eee.csn.ism.egene.util.TplmDecimals,java.util.List" %>
 <%@ include file="header.jsp"%>
 
 <script type="text/javascript">
 
-
-	function changePage(currPage, totalPage) {
+	$(function() {
+		var $elem = $('.content');
 		
+		$('#nav_up').fadeIn('slow');
+		$('#nav_down').fadeIn('slow');  
+		
+		$(window).bind('scrollstart', function(){
+			$('#nav_up,#nav_down').stop().animate({'opacity':'0.2'});
+		});
+		$(window).bind('scrollstop', function(){
+			$('#nav_up,#nav_down').stop().animate({'opacity':'1'});
+		});
+		
+		$('#nav_down').click(
+			function (e) {
+				$('html, body').animate({scrollTop: $elem.height()}, 800);
+			}
+		);
+		$('#nav_up').click(
+			function (e) {
+				$('html, body').animate({scrollTop: '0px'}, 800);
+			}
+		);
+	});
+			
+			
+	function changePage(currPage, totalPage) {		
 		
 		var start = 1;
 		var end = totalPage;
@@ -22,316 +47,303 @@
 			end = start + 4;	
 		}
 		
-		for ($j = 1; $j <= totalPage; $j++) {
+		for (j = 1; j <= totalPage; j++) {
 		
-			if ($j != currPage) {
-				$("#ep_num_" + $j).hide();
+			if (j != currPage) {
+				$("#paget" + j).removeClass("page_selected").addClass("page_unselected");
+				$("#pageb" + j).removeClass("page_selected").addClass("page_unselected");
+				$("#ep_page" + j).hide();
 			} else {
-				$("#ep_num_" + $j).show();
-			}
-			
-			if ($j != currPage) {
-				$("#pn_" + $j).removeClass("pselected").addClass("punselected");
-				$("#pn2_" + $j).removeClass("pselected").addClass("punselected");
-				$("#ep_num_" + $j).hide();
-			} else {
-				$("#pn_" + $j).removeClass("punselected").addClass("pselected");
-				$("#pn2_" + $j).removeClass("punselected").addClass("pselected");
+				$("#paget" + j).removeClass("page_unselected").addClass("page_selected");
+				$("#pageb" + j).removeClass("page_unselected").addClass("page_selected");
+				$("#ep_page" + j).show();
 			}		
 
-			if (($j >= start) && ($j <= end)) {
-				$("#pn_" + $j).show();
-				$("#pn2_" + $j).show();
+			if ((j >= start) && (j <= end)) {
+				$("#paget" + j).show();
+				$("#pageb" + j).show();
 			} else {
-				$("#pn_" + $j).hide();
-				$("#pn2_" + $j).hide();
+				$("#paget" + j).hide();
+				$("#pageb" + j).hide();
 			}
 			
+		}
+		
+		//alert($(".ep_solution_step").css("display"));
+		if ((currPage == totalPage) && ($(".ep_solution_step").css("display") == "none")) {
+			$("#eps_command_bottom").show();
+		} else {
+			$("#eps_command_bottom").hide();
 		}
 					
 		return false;
 	}
-
-	function showHideAnswer(id) {
 	
-		if ($(id).css("display") == "none") {
-			$(id).show();
-		} else {
-			$(id).hide();
-		}
+	
+	function showSolution() {
+		$(".e_exam_paper").show();
+		$(".ep_answer_step").hide();
+		$(".ep_answer_final").hide();
+		$(".ep_solution_step").show();
+		$("#eps_command_bottom").hide();
+		$(".e_grading").hide();		
 		return false;
 	}
+	
+	
+	function gradePaper() {
+		$(".e_engine").hide();
+		$(".e_exam_paper").hide();
+		$(".e_grading").show();
+		return false;
+	}
+	
+			
+	function generateQuestions(typeCount) {
+		
+		var qtypes = "";
+		var idx = 0;
+		var epCount = 0;
+		for (idx=0; idx < typeCount; idx++) {
+			
+			epCount += parseInt($("#qtype_select" + idx + " option:selected").text());
+			qtypes += $("#qtype_select" + idx).val();
+			if (idx != (typeCount-1)) {
+				qtypes += "|";
+			}
+		}
+		
+		if (epCount == 0)
+			return false;
+		
+		var qpage_len = $("#qpage_len").val();
+		$.post(
+			"SvGenerateExam", 
+			{qtypes : qtypes},
+			function(xml) {
+			
+				// print exam paper
+				$("#eps_body").html("");
+				var i = 0;
+				var p = 0;
+				var str = "";
+				$(xml).find("ep").each(function() {
+				
+					if ((i % qpage_len == 0) && (str != "")) {
+						p++;
+					
+						$("#eps_body").append("<div class='ep_page' id='ep_page" + p + "'>" + str + "</div>");
+						str = "";
 
+					}
+					i++;
+				
+					var question = $(this).find("question").text();
+					var answer = $(this).find("answer").text();
+					str += "<div class='ep_num' id='ep_num" + i + "'>";
+					str += "<div class='ep_question' id='ep_question" + i + "'><h3>Question " + i + ":</h3><p>" + question + "</p></div>";
+					str += "<div class='ep_answer_step' id='ep_answer_step" + i + "'><span>Space for working:</span><br /><textarea rows='5' cols='80'></textarea></div>";
+					str += "<div class='ep_answer_final' id='ep_answer_final" + i + "'><span>Final answer:</span><br /><input type='text' size='50'/></div>";
+					str += "<div class='ep_solution_step' id='ep_solution_step" + i + "'><span>Solution:</span><br />" + answer + "</div>";
+					str += "<div class ='ep_solution_final' id='ep_solution_final" + i + "'>0</div>";
+					str += "</div>";
+				});
+				
+				if (str != "") {
+					$("#eps_body").append("<div class='ep_page' id='ep_page"+(++p)+"'>" + str + "</div>");
+					str = "";
+				}
+				
+				
+				// setup paging bottom
+				if (p > 1) {
+					$("#eps_page_navigator_top").show();
+					$("#eps_page_navigator_bottom").show();
+				
+					var j = 0;
+
+					var strPageb = "";
+					strPageb += "<a class='page_unselected' id='pageb_first' title='page 1' href='#' onClick='"+ "changePage(1, " + p + ")" +"'>&lt;&lt;</a>";
+
+					var strPaget = "";
+					strPaget += "<a class='page_unselected' id='paget_first' title='page 1' href='#' onClick='"+ "changePage(1, " + p + ")" +"'>&lt;&lt;</a>";
+
+					for (j = 1; j <= p; j++) {					
+						if (j != 1) {
+							strPaget += "<a class='page_unselected' id='paget"+ j +"' title='page " + j + "' href='#' onClick='"+ "changePage("+ j + ", " + p + ")" +"'>" + j + "</a>";
+							strPageb += "<a class='page_unselected' id='pageb"+ j +"' title='page " + j + "' href='#' onClick='"+ "changePage("+ j + ", " + p + ")" +"'>" + j + "</a>";
+							$("#ep_page" + j).hide();
+						} else {
+							strPaget += "<a class='page_selected' id='paget" + j + "' title='page " + j + "' href='#' onClick='"+ "changePage(" + j + ", " + p + ")" + "'>" + j + "</a>";
+							strPageb += "<a class='page_selected' id='pageb" + j + "' title='page " + j + "' href='#' onClick='"+ "changePage(" + j + ", " + p + ")" + "'>" + j + "</a>";
+						}						
+					}
+					
+					strPaget += "<a class='page_unselected' id='paget_last' title='page "+ p + "' href='#' onClick='"+ "changePage(" + p + ", " + p + ")" + "'>&gt;&gt;</a>";
+					$("#eps_page_navigator_top").html(strPaget);
+
+					strPageb += "<a class='page_unselected' id='pageb_last' title='page "+ p + "' href='#' onClick='"+ "changePage(" + p + ", " + p + ")" + "'>&gt;&gt;</a>";
+					$("#eps_page_navigator_bottom").html(strPageb);
+					
+					for (j = 1; j<=p; j++) {
+						if (j >= 1 && j <= 5) {
+							$("#paget" + j).show();
+							$("#pageb" + j).show();
+						} else {
+							$("#paget" + j).hide();
+							$("#pageb" + j).hide();
+						}
+					}
+				} else {
+						$("#eps_page_navigator_top").hide();
+						$("#eps_page_navigator_bottom").hide();
+						$("#eps_command_bottom").show();
+				}					
+				
+				// print title
+				$("#eps_title").html("<h2>Exam Paper</h2><h4>Topic: Decimals</h4><h4>Generated on: " + showDate() + "</h4>");
+				
+				
+				// hide main menu
+				$(".e_engine").hide();
+				$(".e_exam_paper").show();				
+
+				
+				// automatically scroll up
+				$('html, body').animate({scrollTop: '0px'}, 800);
+				
+			}
+		);
+		
+
+		
+		return false;
+	}
 
 	$(document).ready(function() {
+		$(".table_qtypes tr").mouseover(function(){$(this).addClass("tblover");}).mouseout(function(){$(this).removeClass("tblover");});
 
-		$(".mainbar_tools").hide();
-		$(".mainbar2_tools").hide();
-		$(".eps_gendate").hide();
-		$(".eps_pages").hide();
-		$("#epCount").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });	
-		$("#epCountPage").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });	
-
-		$("#qtopic").change(function () {
-			if($(this).val() == "default") {
-				$(this).addClass("qtopic_empty");
-				$("#epCount").attr('disabled', true);
-				$("#epCountPage").attr('disabled', true);
-				$("#epGen").attr('disabled', true);
-				$("#epGen").attr('src', 'images/submit-disable.gif');
-			} else {
-				$(this).removeClass("qtopic_empty")
-				$("#epCount").attr('disabled', false);
-				$("#epCountPage").attr('disabled', false);
-				$("#epGen").attr('disabled', false);
-				$("#epGen").attr('src', 'images/submit.gif');
+		/*$(".ep_num").hover(
+			function(){
+				alert("enter");
+			},
+			function(){
+				alert("leave");
 			}
-		});
-		$("#qtopic").change();		
-		
-		$("#epGen")
-			.mouseover(function() { 
-				var src = "images/submit-onover.gif";
-				$(this).attr("src", src);
-			})
-			.mousedown(function() { 
-				var src = "images/submit-onpress.gif";
-				$(this).attr("src", src);
-			})
-			.mouseout(function() {
-				var src = "images/submit.gif";
-				$(this).attr("src", src);
-			});
-		
-		$("#epGen").click(function() {
-		
-			if( $("#qtopic").val() == "default") {
-				return false;
-			}
-
-			$(".mainbar_tools").show();
-			$(".mainbar2_tools").show();
-			$(".eps_gendate").show();
-			
-			$epCount = $("#epCount").val();
-			$qtype = $("#qtopic").val();
-			$epCountPage = $("#epCountPage").val();
-			$.post(
-				"SvGenerateExam", 
-				{epcount : $epCount, qtype : $qtype},
-				function(xml) {
-				
-					$("#mainbar_tools").html(
-						"&nbsp;<a href='#' onclick='printPage()' class='print_icon'><span>print without answer</span></a>"
-					);
-
-					$("#mainbar2_tools").html(
-						"&nbsp;<a href='#' onclick='printPageNoCSS()' class='print_icon'><span>print with answer</span></a>"
-					);
-					
-					$("#eps_gendate").html(
-						"&nbsp;<span>Generated on " + showDate() + "</span>");
-						
-					$("#eps_gentopic").html(
-						"<h2>Exam Paper: " + $("#qtopic option:selected").text() +"</h2>"
-					);
-				
-				
-					$("#eps").html("");
-					var $i = 0;
-					var $p = 0;
-					var $str = "";
-					$(xml).find("ep").each(function() {
-					
-						if (($i % $epCountPage == 0) && ($str != "")) {
-							$p++;
-						
-							$("#eps").append("<div id='ep_num_" + ($p) + "'>" + $str + "</div>");
-							$str = "";
-
-						}
-						$i++;
-					
-						$question = $(this).find("question").text();
-						$answer = $(this).find("answer").text();
-						$str += "<div><br /><strong>#" + $i + "# Question:</strong><br />" + $question + "</div>";
-						$str += "<div><a href='#' onclick=\"return showHideAnswer('#epanswer_" + $i + "');\"><img src='images/icon-show-hide.png'></a></div>";
-						$str += "<div class='epanswer' id='epanswer_" + $i + "'><strong>Answer:</strong><br />" + $answer + "</div>";
-						
-					});
-					
-					if ($str != "") {
-						$("#eps").append("<div id='ep_num_"+(++$p)+"'>" + $str + "</div>");
-					}
-					
-					if ($p > 1) {
-						$(".eps_pages").show();
-					
-						var $j = 0;
-						var $strP = "";
-						$strP += "<a class='punselected' id='pn_first' title='page 1' href='#' onClick='"+ "changePage(1, "+$p+")" +"'>&lt;&lt;</a>"
-						for ($j = 1; $j <= $p; $j++) {					
-							if ($j != 1) {
-								$strP += "<a class='punselected' id='pn_"+$j+"' href='#' onClick='"+ "changePage("+$j+", "+$p+")" +"'>"+$j+"</a>"
-								$("#ep_num_" + $j).hide();
-							} else {
-								$strP += "<a class='pselected' id='pn_"+$j+"' href='#' onClick='"+ "changePage("+$j+", "+$p+")" +"'>"+$j+"</a>"
-							}
-							
-						}
-						$strP += "<a class='punselected' id='pn_last' title='page "+$p+"' href='#' onClick='"+ "changePage("+$p+", "+$p+")" +"'>&gt;&gt;</a>";
-						$("#pages1").html($strP);
-						
-						for ($j = 1; $j<=$p; $j++) {
-							if ($j >= 1 && $j <= 5) {
-								$("#pn_" + $j).show();
-							} else {
-								$("#pn_" + $j).hide();
-							}
-						}
-						
-						var $k = 0;
-						var $strP2 = "";
-						$strP2 += "<a class='punselected' id='pn2_first' title='page 1' href='#' onClick='"+ "changePage(1, "+$p+")" +"'>&lt;&lt;</a>"
-						for ($k = 1; $k <= $p; $k++) {					
-							if ($k != 1) {
-								$strP2 += "<a class='punselected' id='pn2_"+$k+"' href='#' onClick='"+ "changePage("+$k+", "+$p+")" +"'>"+$k+"</a>"
-								$("#ep_num_" + $k).hide();
-							} else {
-								$strP2 += "<a class='pselected' id='pn2_"+$k+"' href='#' onClick='"+ "changePage("+$k+", "+$p+")" +"'>"+$k+"</a>"
-							}
-							
-						}
-						$strP2 += "<a class='punselected' id='pn2_last' title='page "+$p+"' href='#' onClick='"+ "changePage("+$p+", "+$p+")" +"'>&gt;&gt;</a>";
-						$("#pages2").html($strP2);
-						
-						for ($k = 1; $k<=$p; $k++) {
-							if ($k >= 1 && $k <= 5) {
-								$("#pn2_" + $k).show();
-							} else {
-								$("#pn2_" + $k).hide();
-							}
-						}						
-					} else {
-						$(".eps_pages").hide();
-					}
-					
-				}
-			);
-			return false;
-		});
+		);*/
 	});
-	
 	
 	
 </script>
 
 <div class="content">
 	<div class="content_resize">
-		<div class="mainbar">
-
-			<div id="mainbar_tools" class="mainbar_tools">
+	
+		<div class="e_engine">
+			<div class="title"><h2>Exam Paper Generator Engine for Topic: Decimals</h2>
 			</div>
-			<div id="mainbar2_tools" class="mainbar_tools">
+			<div class="command_top"><p>command_top</p>
 			</div>
-
-			<div class="printable">
-			
-				<div id="eps_gendate" class="eps_gendate">
-				</div>
-
-				<div class="eps_pages">&nbsp;
-					<p class="pages" id="pages1">&nbsp;
-					</p>
-				</div>
-
-				<div id="eps_gentopic" class="eps_gentopic">
-					<h2>Welcome to eGENE</h2>
-				</div>
-				
-				<div id="eps" class="eps">
-					<p>eGENE is an automatic exam paper generator. Currently it supports exam peper generation limited to topic Decimals on Mathematics Primary 6, based on Singapore syllabus.</p>
-					<p>eGENE generates a collection of exam paper randomly based on predefined templates.</p>
-					<p>Please do following steps:<br />
-						1. Select the topic of exam paper to be generated.<br />
-						2. Select the number of questions to be generated. Allowed value is 1 t0 999.<br />
-						3. Select the number of questions to be displayed per page as the result. Allowed value is 1 to 99.<br />
-					</p>
-					<p>To modify existing templates or add new templates into eGENE, please go to Configurations menu</p>
-				</div>
-				
-				<div class="eps_pages">&nbsp;
-					<p class="pages" id="pages2">&nbsp;
-					</p>
-				</div>				
-				
+			<div class="page_nav_top"><p>page_nav_top</p>
 			</div>
-
-		</div>
-
-
-		<div class="sidebar">
-
-
-			<div class="searchform">
-				<form id="formsearch" name="formsearch" method="post"
-					action="search.jsp">
-					<span><input name="editbox_search" class="editbox_search"
-						id="editbox_search" maxlength="80" placeholder="Search our site:"
-						type="text" />
-					</span> <input name="button_search" src="images/search_btn.gif"
-						class="button_search" type="image" />
+			<div class="article">
+				<form>
+					<table class="table_qtypes">
+						<thead>
+							<tr>
+								<th class="qtype">Question Types:</th>
+								<th class="qnote">&nbsp;</th>
+								<th class="qtype">&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+								List<TplmDecimals> list = TplmDecimals.getTplmDecimalsList();
+								for(int i = 0; i < list.size(); i++) {
+									out.println("<tr>");
+									out.println("<td class='qtype'>" + list.get(i).getQuestionType() + "</td>");
+									out.println("<td class='qtype_note'>number of questions to be generated:</td>");
+									out.println("<td class='qtype_select'><select id='qtype_select" + i + "' name='qtype_select" + i + "'>");
+									out.println("<option selected='true' value='" + list.get(i).getId() + ";0'>0</option>");
+									out.println("<option value='" + list.get(i).getId() + ";5'>5</option>");
+									out.println("<option value='" + list.get(i).getId() + ";10'>10</option>");
+									out.println("<option value='" + list.get(i).getId() + ";20'>20</option>");
+									out.println("<option value='" + list.get(i).getId() + ";50'>50</option>");
+									out.println("</select></td>");
+									out.println("</tr>");
+								}								
+							%>
+						</tbody>
+					</table>
+					
+					<p>
+						Number of questions to be generated per page: 
+						<select id="qpage_len" name="qpage_len">
+							<option value="5" selected="true">5</option>
+							<option value="10">10</option>
+							<option value="20">20</option>
+						</select>
+					</p>
+					
 				</form>
 			</div>
-			<div class="gadget">
-				<h2 class="star">
-					<span>Generator Engine</span>
-				</h2>
-				<div class="clr"></div>
-				<form action="#" method="post" id="sendemail">
-					<ol>
-						<li><label for="qtopic">Question Type</label> <select id="qtopic"
-							name="qtopic">
-								<option id="default" value="default" selected>-- select --</option>
-								<option id="review" value="review">Review</option>
-								<!-- 
-								<option id="psp21.1.vm" value="psp21.1.vm">psp21.1</option>
-								<option id="psp22.1.vm" value="psp22.1.vm">psp22.1</option>
-								<option id="psp22.2.vm" value="psp22.2.vm">psp22.2</option>
-								<option id="psp22.3.vm" value="psp22.3.vm">psp22.3</option>
-								<option id="psp23.1.vm" value="psp23.1.vm">psp23.1</option>
-								<option id="psp23.2.vm" value="psp23.2.vm">psp23.2</option>
-								<option id="psp23.3.vm" value="psp23.3.vm">psp23.3</option>
-								<option id="psp23.4.vm" value="psp23.4.vm">psp23.4</option>
-								<option id="psp24.1.vm" value="psp24.1.vm">psp24.1</option>
-								 -->
-								<option id="psp25.1.vm" value="psp25.1.vm">psp25.1</option>
-								<option id="psp25.2.vm" value="psp25.2.vm">psp25.2</option>
-								<option id="psp25.3.vm" value="psp25.3.vm">psp25.3</option>
-								<option id="psp26.1.vm" value="psp26.1.vm">psp26.1</option>
-								<option id="psp26.2.vm" value="psp26.2.vm">psp26.2</option>
-								<option id="psp27.1.vm" value="psp27.1.vm">psp27.1</option>
-								<option id="psp27.2.vm" value="psp27.2.vm">psp27.2</option>
-								<option id="psp28.1.vm" value="psp28.1.vm">psp28.1</option>
-								<option id="psp29.1.vm" value="psp29.1.vm">psp29.1</option>
-						</select></li>
-						<li><label for="epCount">number of questions to be
-								generated</label> <input id="epCount" name="epCount" maxlength="3"
-							size="2" value="10" /></li>
-						<li><label for="epCountPage">questions per page</label> <input
-							id="epCountPage" name="epCountPage" maxlength="2" size="2" value="10" /></li>
-						<li><input type="image" name="epGen" id="epGen"
-							src="images/submit.gif" class="send" />
-							<div class="clr"></div></li>
-					</ol>
-				</form>
-				
+			<div class="page_nav_bottom"><p>page_nav_bottom</p>
 			</div>
+			<div class="command_bottom">
+				<ul><li>
+					<%
+						out.println("<a href='#' onClick='return generateQuestions(" + list.size() + ");'>Generate Questions</a>");
+					%>
+				</li></ul>
+			</div>			
+		</div>
+		
+		<div class="e_exam_paper">
+			<div class="title" id="eps_title">
+			</div>
+			<div class="command_top">
+				<ul>
+					<li><span>Convert all Questions to Word Document</span></li>
+					<li><a href="" onClick="return false;">Without Solutions</a></li>
+					<li><a href="" onClick="return false;">With Solutions</a></li>
+				</ul>
+			</div>
+			<div class="page_nav_top" id='eps_page_navigator_top'>
+			</div>
+			<div class="article" id="eps_body">
+			</div>
+			<div class="page_nav_bottom" id='eps_page_navigator_bottom'>
+			</div>
+			<div class="command_bottom" id="eps_command_bottom">
+				<ul>
+					<li><a href="#" onClick="return showSolution();">Generate Solutions</a></li>
+					<li><a href="#" onClick="return gradePaper();">Grade Paper</a></li>
+				</ul>
+			</div>			
 		</div>
 
+		<div class="e_grading">
+			<div class="title"><p>title</p>
+			</div>
+			<div class="command_top"><p>command_top</p>
+			</div>
+			<div class="page_nav_top"><p>page_nav_top</p>
+			</div>
+			<div class="article"><p>article</p>
+			</div>
+			<div class="page_nav_bottom"><p>page_nav_bottom</p>
+			</div>
+			<div class="command_bottom"><p>command_bottom</p>
+				<ul>
+					<li><a href="#" onClick="return showSolution();">Generate Solutions</a></li>
+				</ul>
+			</div>	
+		</div
+		
 		<div class="clr"></div>
 	</div>
 </div>
+
 
 
 <%@ include file="footer.jsp"%>

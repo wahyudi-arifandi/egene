@@ -24,7 +24,14 @@ Design by http://www.hotwebsitetemplates.net
 <script type="text/javascript" src="js/jquery.print.js"></script>
 <script type="text/javascript" src="js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="js/jquery.numeric.js"></script>
+<script type="text/javascript" src="js/scroll-startstop.events.jquery.js"></script>
 <script type="text/javascript">
+	$.blockUI.defaults.css.border = 'none';
+	$.blockUI.defaults.css.padding = '15px';
+	$.blockUI.defaults.css.backgroundColor = '#000';
+	$.blockUI.defaults.overlayCSS.opacity = .5;
+	$.blockUI.defaults.css.color = '#fff';
+
 	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 </script>
 	
@@ -34,11 +41,12 @@ Design by http://www.hotwebsitetemplates.net
 
   <div class="header">
     <div class="header_resize">
+	
       <div class="menu_nav">
         <ul>
 			<%
-				String[] pathMenu = {"index.jsp", "#", "#"};
-				String[] menu = {"Home", "Configurations", "About"};
+				String[] pathMenu = {"index.jsp", "#"};
+				String[] menu = {"Home", "About"};
 				List<String> lPathMenu = Arrays.asList(pathMenu);
 				List<String> lMenu = Arrays.asList(menu);
 				if (lPathMenu.size() != lMenu.size()) {
