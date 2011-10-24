@@ -299,7 +299,7 @@
 					fixed: true
 				});
 				$(".ep_answer_final_help").simpletip({
-					content: 'Please type final answer here.<br />If there are more than one answer, type with pipeline \'|\' delimiter, i.e.: 2.53|4.00 ',
+					content: 'Please type final answer here.<br />If there are more than one answer, separate them with character pipeline \'|\' as their delimiter.<br />i.e.: 2.53|4.00 ',
 					fixed: true
 				});           
 			}
