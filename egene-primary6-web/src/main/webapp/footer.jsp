@@ -6,7 +6,7 @@
     <div class="footer2_resize">
       <p>
 		Independent Study Module Project for Master on Communication Software and Networks<br />
-		<a href="http://www.ntu.edu.sg"><img src="images/ntu_logo.png" width="10%" height="10%"></a>
+		<a href="http://www.ntu.edu.sg">Nanyang Technological University</a>
 		<span>&copy; copyright 2011: <a href="mailto:wahyudi1@e.ntu.edu.sg">Wahyudi Arifandi</a></span>
       </p>      
 	  <div class="clr"></div>
