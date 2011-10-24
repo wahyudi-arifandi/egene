@@ -31,7 +31,7 @@ import edu.ntu.eee.csn.ism.egene.util.TplmDecimals;
 public class SvGenerateExam extends HttpServlet {
 
 	private static final long serialVersionUID = -6443702586581697411L;
-	private static Logger LOGGER = Logger.getLogger(SvFunctPingDB.class);
+	private static Logger LOGGER = Logger.getLogger(SvGenerateExam.class);
 
 	private Config config = Config.getInstance();
 	private String templateDirName = null;
@@ -178,6 +178,7 @@ public class SvGenerateExam extends HttpServlet {
 				if (null != list && list.size() > 0) {
 
 					int idx = 0;
+					int epId = 0;
 					while (list.size() > 0) {
 
 						if (LOGGER.isDebugEnabled()) {
@@ -201,13 +202,22 @@ public class SvGenerateExam extends HttpServlet {
 							String[] arrStr = str.split("\\|\\|");
 							xtw.writeStartElement("ep");
 
+							xtw.writeStartElement("id");
+							xtw.writeCharacters(Integer.toString(++epId));
+							xtw.writeEndElement();
+
 							xtw.writeStartElement("question");
 							xtw.writeCharacters(arrStr[0].trim());
 							xtw.writeEndElement();
 
-							xtw.writeStartElement("answer");
+							xtw.writeStartElement("solution-step");
 							if (arrStr.length > 1)
 								xtw.writeCharacters(arrStr[1].trim());
+							xtw.writeEndElement();
+
+							xtw.writeStartElement("solution-final");
+							if (arrStr.length > 2)
+								xtw.writeCharacters(arrStr[2].trim());
 							xtw.writeEndElement();
 
 							xtw.writeEndElement();

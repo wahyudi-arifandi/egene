@@ -69,16 +69,59 @@
 			
 		}
 		
-		//alert($(".ep_solution_step").css("display"));
 		if ((currPage == totalPage) && ($(".ep_solution_step").css("display") == "none")) {
 			$("#eps_command_bottom").show();
 		} else {
 			$("#eps_command_bottom").hide();
 		}
 					
+		// automatically scroll up
+		$('html, body').animate({scrollTop: '0px'}, 800);					
+
 		return false;
 	}
 	
+	
+	function downloadPaper(solution) {
+	
+		// construct xml
+		var xml = "<egene><attributes>";
+		
+		xml += "<level>" + $("#eps_level").text() + "</level>";
+		xml += "<topic>" + $("#eps_topic").text() + "</topic>";
+		xml += "<generated-date>" + $("#eps_generated_date").text() + "</generated-date>";
+		xml += "</attributes><eps>";
+		var examPaper = $(".ep_num");		
+		for (i = 0; i < examPaper.size(); i++) {
+
+			var id = $("#ep_id" + (i + 1)).text();
+			var question = $("#ep_question_text" + (i + 1)).text();
+			var stepAnswer = $("#ep_answer_step_text" + (i + 1)).val();
+			var finalAnswer = $("#ep_answer_final_text" + (i + 1)).val();
+			var stepSolution = $("#ep_solution_step_text" + (i + 1)).text();
+			var finalSolution = $("#ep_solution_final" + (i + 1)).text();			
+		
+			xml += "<ep>";
+			xml += "<id>" + id + "</id>";
+			xml += "<question>" + question + "</question>";
+			xml += "<answer-step>" + stepAnswer + "</answer-step>";
+			xml += "<answer-final>" + finalAnswer + "</answer-final>";
+			xml += "<solution-step>" + stepSolution + "</solution-step>";
+			xml += "<solution-final>" + finalSolution + "</solution-final>";
+			xml += "</ep>";
+		
+		}
+		xml += "</eps></egene>";
+	
+		var input1 = '<input type="hidden" name="solution" value="'+ solution +'" />'; 
+		var input2 = '<input type="hidden" name="egene" value="'+ xml +'" />'; 
+
+		//send request
+		jQuery('<form action="/egene-web/SvCreateMSWord" method="post">' + input1 + input2 + '</form>')
+		.appendTo('body').submit().remove();	
+	
+		return false;
+	}
 	
 	function showSolution() {
 		$(".e_exam_paper").show();
@@ -86,7 +129,10 @@
 		$(".ep_answer_final").hide();
 		$(".ep_solution_step").show();
 		$("#eps_command_bottom").hide();
-		$(".e_grading").hide();		
+		$(".e_grading").hide();	
+
+		changePage(1, $(".ep_page").size());
+		
 		return false;
 	}
 	
@@ -95,6 +141,37 @@
 		$(".e_engine").hide();
 		$(".e_exam_paper").hide();
 		$(".e_grading").show();
+		
+		var correctCount = 0;
+		var wrongCount = 0;
+		var wrongList = new Array();
+		var examPaper = $(".ep_num");
+		for (i = 0; i < examPaper.size(); i++) {
+			
+			var finalAnswer = $("#ep_answer_final_text" + (i + 1)).val();
+			var finalSolution = $("#ep_solution_final" + (i + 1)).text();
+			
+			if (finalAnswer == finalSolution) {
+				correctCount++;
+			} else {
+				wrongCount++;
+				wrongList[wrongList.length] = jQuery.trim($("#ep_id" + (i + 1)).text());
+			}
+			
+		}
+		
+		$("#e_grading_correct_count").html(correctCount + "/" + examPaper.size());
+		$("#e_grading_wrong_count").html(wrongCount + "/" + examPaper.size());
+		
+		var wrongListStr = "";
+		for (i = 0; i < wrongList.length; i++) {
+			wrongListStr += wrongList[i];
+			if (i != wrongList.length) {
+				wrongListStr += ", ";
+			}
+		}
+		$("#e_grading_wrong_list").html(wrongListStr);
+		
 		return false;
 	}
 	
@@ -139,13 +216,16 @@
 					i++;
 				
 					var question = $(this).find("question").text();
-					var answer = $(this).find("answer").text();
+					var solutionStep = $(this).find("solution-step").text();
+					var solutionFinal = $(this).find("solution-final").text();
+					
 					str += "<div class='ep_num' id='ep_num" + i + "'>";
-					str += "<div class='ep_question' id='ep_question" + i + "'><h3>Question " + i + ":</h3><p>" + question + "</p></div>";
-					str += "<div class='ep_answer_step' id='ep_answer_step" + i + "'><span>Space for working:</span><br /><textarea rows='5' cols='80'></textarea></div>";
-					str += "<div class='ep_answer_final' id='ep_answer_final" + i + "'><span>Final answer:</span><br /><input type='text' size='50'/></div>";
-					str += "<div class='ep_solution_step' id='ep_solution_step" + i + "'><span>Solution:</span><br />" + answer + "</div>";
-					str += "<div class ='ep_solution_final' id='ep_solution_final" + i + "'>0</div>";
+					str += "<div class='ep_id' id='ep_id" + i + "'>" + i + "</div>"
+					str += "<div class='ep_question' id='ep_question" + i + "'><h3>Question " + i + ":</h3><p id='ep_question_text" + i + "'>" + question + "</p></div>";
+					str += "<div class='ep_answer_step' id='ep_answer_step" + i + "'><span>Space for working: </span><span class='ep_answer_step_help'>[ ? ]</span><br /><span class='ep_answer_step_text'><textarea rows='5' cols='80' id='ep_answer_step_text" + i + "'></textarea></span></div>";
+					str += "<div class='ep_answer_final' id='ep_answer_final" + i + "'><span>Final answer: </span><span class='ep_answer_final_help'>[ ? ]</span><br /><span class='ep_answer_final_text'><input type='text' size='50' id='ep_answer_final_text" + i + "'/></span></div>";
+					str += "<div class='ep_solution_step' id='ep_solution_step" + i + "'><span>Solution:</span><br /><p id='ep_solution_step_text" + i + "'>" + solutionStep + "</p></div>";
+					str += "<div class ='ep_solution_final' id='ep_solution_final" + i + "'>" + solutionFinal + "</div>";
 					str += "</div>";
 				});
 				
@@ -201,7 +281,7 @@
 				}					
 				
 				// print title
-				$("#eps_title").html("<h2>Exam Paper</h2><h4>Topic: Decimals</h4><h4>Generated on: " + showDate() + "</h4>");
+				$("#eps_title").html("<h2>Exam Paper</h2><h4 id='eps_level'>Level: Primary 6</h4><h4 id='eps_topic'>Topic: Decimals</h4><h4 id='eps_generated_date'>Generated on " + showDate() + "</h4>");
 				
 				
 				// hide main menu
@@ -212,6 +292,16 @@
 				// automatically scroll up
 				$('html, body').animate({scrollTop: '0px'}, 800);
 				
+				
+				// set up tool tip
+				$(".ep_answer_step_help").simpletip({
+					content: 'Please type step by step answer here. ',
+					fixed: true
+				});
+				$(".ep_answer_final_help").simpletip({
+					content: 'Please type final answer here.<br />If there are more than one answer, type with pipeline \'|\' delimiter, i.e.: 2.53|4.00 ',
+					fixed: true
+				});           
 			}
 		);
 		
@@ -221,16 +311,10 @@
 	}
 
 	$(document).ready(function() {
+	
+		// set up table hover
 		$(".table_qtypes tr").mouseover(function(){$(this).addClass("tblover");}).mouseout(function(){$(this).removeClass("tblover");});
 
-		/*$(".ep_num").hover(
-			function(){
-				alert("enter");
-			},
-			function(){
-				alert("leave");
-			}
-		);*/
 	});
 	
 	
@@ -240,7 +324,7 @@
 	<div class="content_resize">
 	
 		<div class="e_engine">
-			<div class="title"><h2>Exam Paper Generator Engine for Topic: Decimals</h2>
+			<div class="title"><h2>Exam Paper Generator Engine</h2><h4>Level: Primary 6, Topic: Decimals</h4>
 			</div>
 			<div class="command_top"><p>command_top</p>
 			</div>
@@ -304,8 +388,8 @@
 			<div class="command_top">
 				<ul>
 					<li><span>Convert all Questions to Word Document</span></li>
-					<li><a href="" onClick="return false;">Without Solutions</a></li>
-					<li><a href="" onClick="return false;">With Solutions</a></li>
+					<li><a href="#" onClick="return downloadPaper(false);">Without Solutions</a></li>
+					<li><a href="#" onClick="return downloadPaper(true);">With Solutions</a></li>
 				</ul>
 			</div>
 			<div class="page_nav_top" id='eps_page_navigator_top'>
@@ -323,17 +407,34 @@
 		</div>
 
 		<div class="e_grading">
-			<div class="title"><p>title</p>
+			<div class="title"><h2>Grade Summary of the Answers</h2><h4>Level: Primary 6</h4><h4>Topic: Decimals</h4>
 			</div>
 			<div class="command_top"><p>command_top</p>
 			</div>
 			<div class="page_nav_top"><p>page_nav_top</p>
 			</div>
-			<div class="article"><p>article</p>
+			<div class="article">
+				<table>
+					<tr>
+						<td>Total number of correct answers</td>
+						<td>:</td>
+						<td><span id="e_grading_correct_count">N/A</span></td>
+					</tr>
+					<tr>
+						<td>Total number of wrong answers</td>
+						<td>:</td>
+						<td><span id="e_grading_wrong_count">N/A</span></td>
+					</tr>
+					<tr>
+						<td>Questions provided with wrong answer</td>
+						<td>:</td>
+						<td><span id="e_grading_wrong_list">N/A</span></td>
+					</tr>
+				</table>
 			</div>
 			<div class="page_nav_bottom"><p>page_nav_bottom</p>
 			</div>
-			<div class="command_bottom"><p>command_bottom</p>
+			<div class="command_bottom">
 				<ul>
 					<li><a href="#" onClick="return showSolution();">Generate Solutions</a></li>
 				</ul>

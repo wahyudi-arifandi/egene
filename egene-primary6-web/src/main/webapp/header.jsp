@@ -16,15 +16,16 @@ Design by http://www.hotwebsitetemplates.net
 <script type="text/javascript" src="js/cufon-yui.js"></script>
 <script type="text/javascript" src="js/droid_sans_400-droid_sans_700.font.js"></script>
 <script type="text/javascript" src="js/cuf_run.js"></script>
-<script type="text/javascript" src="js/jquery-1.6.2.js"></script>
-<script type="text/javascript" src="js/radius.js"></script>
 <!-- CuFon ends -->
 
+<script type="text/javascript" src="js/jquery-1.6.2.js"></script>
+<script type="text/javascript" src="js/radius.js"></script>
 <script type="text/javascript" src="js/datetime.js"></script>
 <script type="text/javascript" src="js/jquery.print.js"></script>
 <script type="text/javascript" src="js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="js/jquery.numeric.js"></script>
 <script type="text/javascript" src="js/scroll-startstop.events.jquery.js"></script>
+<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>
 <script type="text/javascript">
 	$.blockUI.defaults.css.border = 'none';
 	$.blockUI.defaults.css.padding = '15px';
@@ -33,6 +34,9 @@ Design by http://www.hotwebsitetemplates.net
 	$.blockUI.defaults.css.color = '#fff';
 
 	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	
+	
+	
 </script>
 	
 </head>

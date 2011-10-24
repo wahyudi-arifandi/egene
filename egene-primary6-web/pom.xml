@@ -129,6 +129,13 @@
 			<systemPath>${basedir}/configurations/WEB-INF/lib/tomcat-jdbc.jar</systemPath>
 		</dependency>
 		<dependency>
+			<groupId>tomcat-jdbc</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>xx</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/configurations/WEB-INF/lib/java2word-3.0_2011Aug02.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-servlet-api</artifactId>
 			<version>7.0.16</version>
@@ -169,7 +176,7 @@
 						</manifestEntries>
 					</archive>
 					<filters>
-						<filter>${basedir}/configurations/prod-filter.properties</filter>
+						<filter>${basedir}/configurations/dev-filter.properties</filter>
 					</filters>
 					<nonFilteredFileExtensions>
 						<!-- default value contains jpg,jpeg,gif,bmp,png -->
