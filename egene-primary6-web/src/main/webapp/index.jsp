@@ -106,8 +106,14 @@
 			xml += "<question>" + question + "</question>";
 			xml += "<answer-step>" + stepAnswer + "</answer-step>";
 			xml += "<answer-final>" + finalAnswer + "</answer-final>";
-			xml += "<solution-step>" + stepSolution + "</solution-step>";
-			xml += "<solution-final>" + finalSolution + "</solution-final>";
+			
+			if ($(".ep_solution_step").is(":visible")) {
+				xml += "<solution-step>" + stepSolution + "</solution-step>";
+				xml += "<solution-final>" + finalSolution + "</solution-final>";
+			} else {
+				xml += "<solution-step>" + Tea.decrypt(stepSolution, "123") + "</solution-step>";
+				xml += "<solution-final>" + Tea.decrypt(finalSolution, "123") + "</solution-final>";
+			}
 			xml += "</ep>";
 		
 		}
@@ -124,6 +130,17 @@
 	}
 	
 	function showSolution() {
+		
+		var examPaper = $(".ep_num");
+		for (i = 0; i < examPaper.size(); i++) {
+		
+			var solutionStep = $("#ep_solution_step_text" + (i + 1)).text();
+			$("#ep_solution_step_text" + (i + 1)).html(Tea.decrypt(solutionStep, "123"));
+			
+			var solutionFinal = $("#ep_solution_final" + (i + 1)).text();
+			$("#ep_solution_final" + (i + 1)).html(Tea.decrypt(solutionFinal, "123"));		
+		}		
+		
 		$(".e_exam_paper").show();
 		$(".ep_answer_step").hide();
 		$(".ep_answer_final").hide();
@@ -131,6 +148,7 @@
 		$("#eps_command_bottom").hide();
 		$(".e_grading").hide();	
 
+		
 		changePage(1, $(".ep_page").size());
 		
 		return false;
@@ -224,8 +242,8 @@
 					str += "<div class='ep_question' id='ep_question" + i + "'><h3>Question " + i + ":</h3><p id='ep_question_text" + i + "'>" + question + "</p></div>";
 					str += "<div class='ep_answer_step' id='ep_answer_step" + i + "'><span>Space for working: </span><span class='ep_answer_step_help'>[ ? ]</span><br /><span class='ep_answer_step_text'><textarea rows='5' cols='80' id='ep_answer_step_text" + i + "'></textarea></span></div>";
 					str += "<div class='ep_answer_final' id='ep_answer_final" + i + "'><span>Final answer: </span><span class='ep_answer_final_help'>[ ? ]</span><br /><span class='ep_answer_final_text'><input type='text' size='50' id='ep_answer_final_text" + i + "'/></span></div>";
-					str += "<div class='ep_solution_step' id='ep_solution_step" + i + "'><span>Solution:</span><br /><p id='ep_solution_step_text" + i + "'>" + solutionStep + "</p></div>";
-					str += "<div class ='ep_solution_final' id='ep_solution_final" + i + "'>" + solutionFinal + "</div>";
+					str += "<div class='ep_solution_step' id='ep_solution_step" + i + "'><span>Solution:</span><br /><p id='ep_solution_step_text" + i + "'>" + Tea.encrypt(solutionStep, "123") + "</p></div>";
+					str += "<div class ='ep_solution_final' id='ep_solution_final" + i + "'>" + Tea.encrypt(solutionFinal, "123") + "</div>";
 					str += "</div>";
 				});
 				
