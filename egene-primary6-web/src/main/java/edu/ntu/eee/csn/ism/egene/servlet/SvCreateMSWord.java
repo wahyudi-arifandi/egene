@@ -141,17 +141,21 @@ public class SvCreateMSWord extends HttpServlet {
 			NodeList nodesEps = doc.getElementsByTagName("eps");
 			Node nodeEps = nodesEps.item(0);
 
-			NodeList nodesLevel = doc.getElementsByTagName("level");
-			Node nodeLevel = nodesLevel.item(0);
+			NodeList nodesSubject = doc.getElementsByTagName("subject");
+			Node nodeSubject = nodesSubject.item(0);
 
 			NodeList nodesTopic = doc.getElementsByTagName("topic");
 			Node nodeTopic = nodesTopic.item(0);
 
+			NodeList nodesLevel = doc.getElementsByTagName("level");
+			Node nodeLevel = nodesLevel.item(0);
+
 			NodeList nodesGenDate = doc.getElementsByTagName("generated-date");
 			Node nodeGenDate = nodesGenDate.item(0);
 
-			myDoc.addEle(Paragraph.with(nodeLevel.getTextContent()).create());
+			myDoc.addEle(Paragraph.with(nodeSubject.getTextContent()).create());
 			myDoc.addEle(Paragraph.with(nodeTopic.getTextContent()).create());
+			myDoc.addEle(Paragraph.with(nodeLevel.getTextContent()).create());
 			myDoc.addEle(Paragraph.with(nodeGenDate.getTextContent()).create());
 
 			NodeList nodesEp = ((Element) nodeEps).getElementsByTagName("ep");

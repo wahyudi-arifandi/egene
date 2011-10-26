@@ -87,8 +87,9 @@
 		// construct xml
 		var xml = "<egene><attributes>";
 		
-		xml += "<level>" + $("#eps_level").text() + "</level>";
+		xml += "<subject>" + $("#eps_subject").text() + "</subject>";
 		xml += "<topic>" + $("#eps_topic").text() + "</topic>";
+		xml += "<level>" + $("#eps_level").text() + "</level>";
 		xml += "<generated-date>" + $("#eps_generated_date").text() + "</generated-date>";
 		xml += "</attributes><eps>";
 		var examPaper = $(".ep_num");		
@@ -169,7 +170,7 @@
 			var finalAnswer = $("#ep_answer_final_text" + (i + 1)).val();
 			var finalSolution = $("#ep_solution_final" + (i + 1)).text();
 			
-			if (finalAnswer == finalSolution) {
+			if (finalAnswer == Tea.decrypt(finalSolution, "123")) {
 				correctCount++;
 			} else {
 				wrongCount++;
@@ -299,7 +300,7 @@
 				}					
 				
 				// print title
-				$("#eps_title").html("<h2>Exam Paper</h2><h4 id='eps_level'>Level: Primary 6</h4><h4 id='eps_topic'>Topic: Decimals</h4><h4 id='eps_generated_date'>Generated on " + showDate() + "</h4>");
+				$("#eps_title").html("<h2>Exam Paper</h2><h4 id='eps_subject'>Subject: Mathematics</h4><h4 id='eps_topic'>Topic: Decimals</h4><h4 id='eps_level'>Level: Primary 6</h4><h4 id='eps_generated_date'>Generated on " + showDate() + "</h4>");
 				
 				
 				// hide main menu
@@ -342,7 +343,7 @@
 	<div class="content_resize">
 	
 		<div class="e_engine">
-			<div class="title"><h2>Exam Paper Generator Engine</h2><h4>Level: Primary 6, Topic: Decimals</h4>
+			<div class="title"><h2>Exam Paper Generator Engine</h2><h4>Subject: Mathematics, Topic: Decimals, Level: Primary 6</h4>
 			</div>
 			<div class="command_top"><p>command_top</p>
 			</div>
