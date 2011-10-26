@@ -15,4 +15,6 @@ $ratioDenom units = ($ratioDenom/$diff) x $diff2 = $item1W<br />
 ${name1}''s $tplContainerFluide contained $item1W kg of $tplFluid.<br />
 (b)<br />
 $item1WBruto - $item1W = $containerW<br />
-The mass of the empty $tplContainerFluide was $containerW kg.');
+The mass of the empty $tplContainerFluide was $containerW kg.
+||
+$item1W|$containerW');

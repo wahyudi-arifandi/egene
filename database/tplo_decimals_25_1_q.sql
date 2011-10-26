@@ -10,4 +10,6 @@ CREATE TABLE `tplo_decimals_25_1_q` (
 insert into `tplo_decimals_25_1_q`(`id`,`value`) values (1,'What was $namePossAdj average monthly earnings during this period?
 || 
 ${name}''s commission for the $periodMonth#cminus()month = ($nMonthSalesD / $commBasic) x $commissionD = $nCommissionTotalD<br />
-#upperFirst($namePossAdj) average monthly earnings during this period was: $fixSalaryD + ($nCommissionTotalD / $periodMonth) = ${currency}$monthlyEarningsD');
+#upperFirst($namePossAdj) average monthly earnings during this period was: $fixSalaryD + ($nCommissionTotalD / $periodMonth) = ${currency}$monthlyEarningsD
+||
+$monthlyEarningsD');

@@ -30,7 +30,9 @@ remaining = total - (price of $item1) = $totalMoney - $priceItem1 = $remaining1<
 price of $item2 + price of $item3 = ($ratioNum/$ratioDenom) x $remaining1 = $priceItem23<br />
 price of $item2 : price of $item3 = $priceItem2Mul : 1<br />
 price of $item2 = ($priceItem2Mul / ($priceItem2Mul + 1)) x $priceItem23 = $priceItem2<br />
-$name spent ${currency}$priceItem2 on the $item2');
+$name spent ${currency}$priceItem2 on the $item2
+||
+$priceItem2');
 insert into `tplo_decimals_28_1_112`(`id`,`value`) values (2,'(a) What fraction of $namePossAdj money did $name spend on the $item1?<br />
 (b) How much did $namePronS spend on the $item2?
 || 
@@ -56,4 +58,6 @@ remaining = total - (price of $item1) = $totalMoney - $priceItem1 = $remaining1<
 price of $item2 + price of $item3 = ($ratioNum/$ratioDenom) x $remaining1 = $priceItem23<br />
 price of $item2 : price of $item3 = $priceItem2Mul : 1<br />
 price of $item2 = ($priceItem2Mul / ($priceItem2Mul + 1)) x $priceItem23 = $priceItem2<br />
-$name spent ${currency}$priceItem2 on the $item2');
+$name spent ${currency}$priceItem2 on the $item2
+||
+$ratioItem1.get(0)/$ratioItem1.get(1)|$priceItem2');

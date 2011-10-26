@@ -34,7 +34,9 @@ price of $item2 : price of $item3 = $priceItem2Mul : 1<br />
 price of $item3 = (1 / ($priceItem2Mul + 1)) x $priceItem23 = $priceItem3<br />
 $name spent ${currency}$priceItem3 on the $item3Plural.<br />
 Since $namePronS bought $item3Count $item3Plural, hence:<br />
-#upperFirst($namePronS) paid for each $item3 = $priceItem3 / $item3Count = ${currency}$priceItem3x');
+#upperFirst($namePronS) paid for each $item3 = $priceItem3 / $item3Count = ${currency}$priceItem3x
+||
+$ratioItem1.get(0)/$ratioItem1.get(1)|$priceItem3x');
 insert into `tplo_decimals_28_1_122`(`id`,`value`) values (2,'(a) What fraction of $namePossAdj money did $name spend on the $item1?<br />
 (b) If each $item2 cost ${currency}$priceItem2x, how many $item2Plural did $namePronS he buy?
 || 
@@ -62,4 +64,6 @@ price of $item2 : price of $item3 = $priceItem2Mul : 1<br />
 price of $item2 = ($priceItem2Mul / ($priceItem2Mul + 1)) x $priceItem23 = $priceItem2<br />
 $name spent ${currency}$priceItem2 on the $item2Plural.<br />
 Since each $item2 cost ${currency}$priceItem2x, hence:<br />
-Number of $item2Plural that $namePronS bought = $priceItem2 / $priceItem2x = $item2Count');
+Number of $item2Plural that $namePronS bought = $priceItem2 / $priceItem2x = $item2Count
+||
+$ratioItem1.get(0)/$ratioItem1.get(1)|$item2Count');

@@ -11,14 +11,14 @@ CREATE TABLE `tplm_decimals` (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (1,'psp21.1.vm',1,'psp21.1',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (2,'psp22.1.vm',1,'psp22.1',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (3,'psp22.2.vm',1,'psp22.2',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (4,'psp22.3.vm',1,'psp22.3',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (5,'psp23.1.vm',1,'psp23.1',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (6,'psp23.2.vm',1,'psp23.2',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (7,'psp23.3.vm',1,'psp23.3',1);
-insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (8,'psp23.4.vm',1,'psp23.4',1);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (1,'psp21.1.vm',1,'psp21.1',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (2,'psp22.1.vm',1,'psp22.1',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (3,'psp22.2.vm',1,'psp22.2',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (4,'psp22.3.vm',1,'psp22.3',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (5,'psp23.1.vm',1,'psp23.1',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (6,'psp23.2.vm',1,'psp23.2',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (7,'psp23.3.vm',1,'psp23.3',0);
+insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (8,'psp23.4.vm',1,'psp23.4',0);
 insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (9,'psp24.1.vm',1,'psp24.1',1);
 insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (10,'psp25.1.vm',1,'psp25.1',1);
 insert into `tplm_decimals`(`id`,`value`,`value_type`,`question_type`,`active`) values (11,'psp25.2.vm',1,'psp25.2',1);

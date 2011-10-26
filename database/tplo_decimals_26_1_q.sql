@@ -10,4 +10,6 @@ CREATE TABLE `tplo_decimals_26_1_q` (
 insert into `tplo_decimals_26_1_q`(`id`,`value`) values (1,'How much money did $namePronS earn?
 ||
 Number of money collected by $name from the $itemPlural $namePronS sold = ($weightSellGrTotal / $priceSellWeightGr) x $priceSellWeightGr = ${currency}$revenue.<br />
-#upperFirst($namePronS) earned = $revenue - ($weightSellGrTotal x $priceBuyKg) = ${currency}$profit');
+#upperFirst($namePronS) earned = $revenue - ($weightSellGrTotal x $priceBuyKg) = ${currency}$profit
+||
+$profit');

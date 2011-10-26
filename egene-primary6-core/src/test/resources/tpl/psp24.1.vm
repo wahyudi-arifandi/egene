@@ -15,6 +15,9 @@
 #else
 #set($name1Gender = "female")
 #end
+#set($name1PronS = $vNounFormatter.genPronSubjGender($name1, $name1Gender))
+#set($name1PossA = $vNounFormatter.genPossAdjGender($name1, $name1Gender))
+
 #set($name2Excl = [$name1])
 #set($tplNameTbl2 = $vOptGenerator.genOptStr($tplNameTblList))
 #set($name2 = $vTemplateGenerator.retrieveTplExcl($tplNameTbl2, $name2Excl))
@@ -23,24 +26,64 @@
 #else
 #set($name2Gender = "female")
 #end
+#set($name2PronS = $vNounFormatter.genPronSubjGender($name2, $name2Gender))
+#set($name2PossA = $vNounFormatter.genPossAdjGender($name2, $name2Gender))
+
+#set($currency = $escapeTool.getD())
+
 #set($tplItemTblList = ["tpln_stationary", "tpln_fruit", "tpln_cake", "tpln_book"])
 #set($tplItemTbl = $vOptGenerator.genOptStr($tplItemTblList))
 #set($item1 = $vTemplateGenerator.retrieveTpl($tplItemTbl))
+#set($item1P = $vNounFormatter.genPlural($item1))
 #set($item2Excl = [$item1])
 #set($item2 = $vTemplateGenerator.retrieveTplExcl($tplItemTbl, $item2Excl))
+#set($item2P = $vNounFormatter.genPlural($item2))
+
 #set($item1Price = $vNumberGenerator.genIntMul(100, 500, [10]))
-#set($item1PriceD = $mathTool.toDouble($item1Price) / 100)
 #set($item2Price = $vNumberGenerator.genIntMul(100, 1000, [10]))
-#set($item1PriceD = $mathTool.toDouble($item2Price) / 100)
+
 #set($name1Item1Count = $vNumberGenerator.genInt(2, 20))
-#set($name1Item2Count = $vNumberGenerator.genInt(2, 20))
+#set($name1item1Countplus = $name1Item1Count + 1)
+#set($name1item1Countminus = $name1Item1Count - 1)
+#set($name1Item2CountExcl = [$name1Item1Count, $name1item1Countplus, $name1item1Countminus])
+#set($name1Item2Count = $vNumberGenerator.genIntExcl(2, 20, $name1Item2CountExcl))
+
 #set($name2Item1Count = $vNumberGenerator.genInt(2, 20))
 #set($name2Item2Count = $vNumberGenerator.genInt(2, 20))
+
 #set($name1TotalPaid = ($name1Item1Count * $item1Price) + ($name1Item2Count * $item2Price))
-#set($name1TotalPaidD = $mathTool.toDouble($name1TotalPaid) / 100)
 #set($name2TotalPaid = ($name2Item1Count * $item1Price) + ($name2Item2Count * $item2Price))
-#set($name2TotalPaidD = $mathTool.toDouble($name2TotalPaid) / 100)
+
 #set($item1Item2Price = $item1Price + $item2Price)
+
+#if($name1Item1Count > $name1Item2Count)
+#set($item1Item2PriceN = $name1Item2Count * $item1Item2Price)
+#set($name1ItemDiff = $name1Item1Count - $name1Item2Count)
+#set($itemNPrice = $name1TotalPaid - $item1Item2PriceN)
+#else
+#set($item1Item2PriceN = $name1Item1Count * $item1Item2Price)
+#set($itemNPrice = $name1TotalPaid - $item1Item2PriceN)
+#set($name1ItemDiff = $name1Item2Count - $name1Item1Count)
+#end
+
+#set($name2Item2NPrice = $name2Item2Count * $item2Price)
+
+#set($item1PriceD = $mathTool.toDouble($item1Price) / 100)
+#set($item1PriceD = $vFormatter.formatDecimal($item1PriceD, 2))
+#set($item2PriceD = $mathTool.toDouble($item2Price) / 100)
+#set($item2PriceD = $vFormatter.formatDecimal($item2PriceD, 2))
+#set($name1TotalPaidD = $mathTool.toDouble($name1TotalPaid) / 100)
+#set($name1TotalPaidD = $vFormatter.formatDecimal($name1TotalPaidD, 2))
+#set($name2TotalPaidD = $mathTool.toDouble($name2TotalPaid) / 100)
+#set($name2TotalPaidD = $vFormatter.formatDecimal($name2TotalPaidD, 2))
 #set($item1Item2PriceD = $mathTool.toDouble($item1Item2Price) / 100)
+#set($item1Item2PriceD = $vFormatter.formatDecimal($item1Item2PriceD, 2))
+#set($item1Item2PriceND = $mathTool.toDouble($item1Item2PriceN) / 100)
+#set($item1Item2PriceND = $vFormatter.formatDecimal($item1Item2PriceND, 2))
+#set($itemNPriceD = $mathTool.toDouble($itemNPrice) / 100)
+#set($itemNPriceD = $vFormatter.formatDecimal($itemNPriceD, 2))
+#set($name2Item2NPriceD = $mathTool.toDouble($name2Item2NPrice) / 100)
+#set($name2Item2NPriceD = $vFormatter.formatDecimal($name2Item2NPriceD, 2))
+
 ## generate exam paper
 #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_24_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_24_1_q"))

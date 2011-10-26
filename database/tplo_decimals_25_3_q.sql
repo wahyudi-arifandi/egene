@@ -25,4 +25,6 @@ then mass of a small packet = ($pack1TotalWeightKg kg) / $pack1Count = $pack1Wei
 Total mass of all big packets = (1 - ${pack1RatioPer10}/10) x ($packTotalWeightKg kg) = ${pack2RatioPer10}/10 x ($packTotalWeightKg kg) = $pack2TotalWeightKg kg,<br />
 then mass of a big packet = ($pack2TotalWeightKg kg) / $pack2Count = $pack2WeightKg kg.<br />
 Total mass of $packBigCountQ big packets and $packSmallCountQ small packets of $groceries = ($packBigCountQ x ($pack2WeightKg kg)) + ($packSmallCountQ x ($pack1WeightKg kg)) = $packWeightQ kg.<br />
-#end');
+#end
+||
+$packWeightQ');

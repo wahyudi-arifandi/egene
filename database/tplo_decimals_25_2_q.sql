@@ -11,4 +11,6 @@ insert into `tplo_decimals_25_2_q`(`id`,`value`) values (1,'If $namePossAdj tota
 find $namePossAdj monthly salary.
 ||
 ${name}''s commission for the $periodMonth#cminus()month = ($nMonthSalesD / $commBasic) x $commissionD = $nCommissionTotalD<br />
-#upperFirst($namePossAdj) monthly salary = $monthlyEarningsD - ($nCommissionTotalD / $periodMonth) = ${currency}$fixSalaryD');
+#upperFirst($namePossAdj) monthly salary = $monthlyEarningsD - ($nCommissionTotalD / $periodMonth) = ${currency}$fixSalaryD
+||
+$fixSalaryD');
