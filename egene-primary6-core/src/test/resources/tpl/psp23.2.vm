@@ -8,19 +8,40 @@
 ##############################
 ## prepare elements
 #set($goods = $vTemplateGenerator.retrieveTpl("tpln_music_instrument"))
+#set($goodsPl = $vNounFormatter.genPlural($goods))
+
+#set($currency = $escapeTool.getD())
+
 #set($priceNormal = $vNumberGenerator.genDouble(2000, 10000, 1))
 #set($priceNormalCent = $priceNormal * 100)
 #set($priceNormalCent = $mathTool.toInteger($priceNormalCent))
+
 #set($priceDefectLessCentMax = $priceNormalCent / 2)
 #set($priceDefectLessCent = $vNumberGenerator.genIntMul(1000, $priceDefectLessCentMax, [10]))
 #set($priceDefectCent = $priceNormalCent - $priceDefectLessCent)
 #set($priceDefect = $mathTool.toDouble($priceDefectCent) / 100)
+
 #set($saleTotal = $vNumberGenerator.genInt(5, 15))
+
 #set($saleDefectMax = $saleTotal / 3)
 #set($saleDefect = $vNumberGenerator.genInt(1, $saleDefectMax))
+
 #set($saleTotalSetCent = (($saleTotal - $saleDefect) * $priceNormalCent) + ($saleDefect * $priceDefectCent))
+#set($saleTotalSet = $mathTool.toDouble($saleTotalSetCent) / 100)
 #set($setCount = $vNumberGenerator.genInt(3, 10))
+
 #set($saleYesterdayCent = $setCount * $saleTotalSetCent)
 #set($saleYesterday = $mathTool.toDouble($saleYesterdayCent) / 100)
+
+#set($answerA = $setCount * ($saleTotal - $saleDefect))
+#set($answerBTmp = $setCount * $saleDefect)
+#set($answerB = $setCount * $saleDefect * ($priceNormal - $priceDefect))
+
+#set($priceNormal = $vFormatter.formatDecimal($priceNormal, 2))
+#set($priceDefect = $vFormatter.formatDecimal($priceDefect, 2))
+#set($saleYesterday = $vFormatter.formatDecimal($saleYesterday, 2))
+#set($saleTotalSet = $vFormatter.formatDecimal($saleTotalSet, 2))
+#set($answerB = $vFormatter.formatDecimal($answerB, 2))
+
 ## generate exam paper
 #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_2_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_2_q"))

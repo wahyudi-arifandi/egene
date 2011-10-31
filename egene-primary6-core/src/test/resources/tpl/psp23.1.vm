@@ -11,22 +11,43 @@
 #set($tplNameTbl = $vOptGenerator.genOptStr($tplNameTblList))
 #set($name = $vTemplateGenerator.retrieveTpl($tplNameTbl))
 #if($tplNameTbl == "tpln_male_name")
-#set($tplNameGender = "male")
+#set($nameGender = "male")
 #else
-#set($tplNameGender = "female")
+#set($nameGender = "female")
 #end
+#set($namePronS = $vNounFormatter.genPronSubjGender($name, $nameGender))
+#set($namePossAdj = $vNounFormatter.genPossAdjGender($name, $nameGender))
+
+#set($currency = $escapeTool.getD())
+
 #set($salaryNormal = $vNumberGenerator.genDouble(10, 200, 1))
 #set($salaryNormalCent = $salaryNormal * 100)
 #set($salaryNormalCent = $mathTool.toInteger($salaryNormalCent))
+
 #set($salaryOTMoreCent = $vNumberGenerator.genIntMul(10, $salaryNormalCent, [10]))
 #set($salaryOTCent = $salaryNormalCent + $salaryOTMoreCent)
 #set($salaryOT = $mathTool.toDouble($salaryOTCent) / 100)
+
 #set($workHourTotal = $vNumberGenerator.genInt(15, 30))
+
 #set($workHourOTMax = $workHourTotal / 2)
 #set($workHourOT = $vNumberGenerator.genInt(1, $workHourOTMax))
+
 #set($salaryTotalSetCent = (($workHourTotal - $workHourOT) * $salaryNormalCent) + ($workHourOT * $salaryOTCent))
+#set($salaryTotalSet = $mathTool.toDouble($salaryTotalSetCent) / 100)
 #set($setCount = $vNumberGenerator.genInt(5, 15))
+
 #set($salaryMonthCent = $setCount * $salaryTotalSetCent)
-#set($salaryMonth =$mathTool.toDouble($salaryMonthCent) / 100)
+#set($salaryMonth = $mathTool.toDouble($salaryMonthCent) / 100)
+
+#set($answerA = $setCount * $workHourOT)
+#set($answerB = $answerA * ($salaryOT - $salaryNormal))
+
+#set($salaryNormal = $vFormatter.formatDecimal($salaryNormal, 2))
+#set($salaryOT = $vFormatter.formatDecimal($salaryOT, 2))
+#set($salaryMonth = $vFormatter.formatDecimal($salaryMonth, 2))
+#set($answerB = $vFormatter.formatDecimal($answerB, 2))
+#set($salaryTotalSet = $vFormatter.formatDecimal($salaryTotalSet, 2))
+
 ## generate exam paper
 #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_1_s")) #evaluate($vTemplateGenerator.retrieveTpl("tplo_decimals_23_1_q"))

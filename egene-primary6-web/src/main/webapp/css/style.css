@@ -109,6 +109,7 @@ a { margin:0; padding:0; color:#78bbe6; text-decoration:underline; }
 .e_grading .command_top { margin:0; padding:0 24px; width:auto; text-align:left; display:none; }
 .e_grading .page_nav_top { margin:12px 0; padding:0 24px; width:auto; text-align:left; display:none; }
 .e_grading .article { margin:0; padding:0 24px; width:auto; text-align:left; }
+.e_grading .article table tr td { margin:0; padding:0 24px; vertical-align:top; }
 .e_grading .page_nav_bottom { margin:12px 0; padding:0 24px; width:auto; text-align:left; display:none; }
 
 .e_grading .command_bottom { margin:0; padding:0 24px; width:auto; text-align:center; }

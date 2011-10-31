@@ -8,8 +8,15 @@ CREATE TABLE `tplo_decimals_23_1_q` (
 
 
 insert into `tplo_decimals_23_1_q`(`id`,`value`) values (1,'<br />(a) How many hours of overtime did #upperFirst($name) work last month?<br />
-(b) How much less money would #upperFirst($name) earn if $vNounFormatter.genPronSubjGender($name, $tplNameGender) was not paid more for each hour of overtime?
-#set($answerA = $setCount * $workHourOT)
-#set($answerB = $answerA * ($salaryOT - $salaryNormal))
-||(a) #upperFirst($vNounFormatter.genPronSubjGender($name, $tplNameGender)) worked $answerA hours of overtime.<br />
-(b) #upperFirst($vNounFormatter.genPronSubjGender($name, $tplNameGender)) would earn $escapeTool.getD()$vFormatter.formatDecimal($answerB, 2) less.');
+(b) How much less money would #upperFirst($name) earn if $namePronS was not paid more for each hour of overtime?
+||
+(a)<br />
+For every $workHourTotal hours, $namePossAdj salary = ($workHourTotal - $workHourOT) x $salaryNormal + $workHourOT x $salaryOT = $salaryTotalSet<br />
+$salaryMonth/$salaryTotalSet = $setCount<br />
+$workHourOT x $setCount = $answerA<br />
+#upperFirst($namePronS) worked $answerA hours of overtime.<br />
+(b)<br />
+($salaryOT - $salaryNormal) x $answerA = $answerB<br />
+#upperFirst($namePronS) would earn ${currency}$answerB less.
+||
+$answerA|$answerB');

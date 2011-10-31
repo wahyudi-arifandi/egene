@@ -9,7 +9,14 @@ CREATE TABLE `tplo_decimals_23_3_q` (
 
 insert into `tplo_decimals_23_3_q`(`id`,`value`) values (1,'<br />(a) What was the total number of parcels delivered on time last time?<br />
 (b) How much less money did the company collect last month because of the parcels which were delivered late?
-#set($answerA = $setCount * ($saleTotal - $saleDefect))
-#set($answerB = $setCount * $saleDefect * ($priceNormal - $priceDefect))
-||(a) It delivered $answerA parcels on time<br />
-(b) It collected $escapeTool.getD()$vFormatter.formatDecimal($answerB, 2) less money because of delivering parcels late.');
+||
+(a)<br />
+For every $saleTotal parcels, its revenue = ($saleTotal - $saleDefect) x $priceNormal + $saleDefect x $priceDefect = $saleTotalSet<br />
+$saleLastMonth/$saleTotalSet = $setCount<br />
+Total number of parcels delivered on time last time = ($saleTotal - $saleDefect) x $setCount = $answerA<br />
+(b)<br /> 
+Total number of parcels delivered late last time = $saleDefect x $setCount = $answerBTmp<br />
+$answerBTmp x ($priceNormal - $priceDefect) = $answerB<br />
+It collected ${currency}$answerB less money because of delivering parcels late.
+||
+$answerA|$answerB');
